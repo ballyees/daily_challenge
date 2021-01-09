@@ -30,6 +30,7 @@ class MyApp extends StatelessWidget {
             return MultiProvider(
                 providers: [
                   ChangeNotifierProvider.value(value: CounterProvider()),
+                  ChangeNotifierProvider.value(value: PageIndexProvider()),
                 ],
                 child: Consumer<AppThemeProvider>(
                   builder: (context, data, child) => MaterialApp(
@@ -47,55 +48,103 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class PageIndexProvider extends ValueNotifier<int>{
-  PageIndexProvider(int currentIndex) : super(currentIndex);
-
-}
-
-class HomePage extends StatefulWidget {
-  @override
-  _HomePageState createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
+class PageIndexProvider with ChangeNotifier {
   int _currentIndex;
-  static final _HomePageState _instance = _HomePageState._internal();
-  factory _HomePageState() {
+  int get currentIndex => _currentIndex;
+
+  static final PageIndexProvider _instance = PageIndexProvider._internal();
+  factory PageIndexProvider() {
     CustomLogger.log('home page: singleton factory');
     return _instance;
   }
-  _HomePageState._internal() {
+  PageIndexProvider._internal() {
     CustomLogger.log('home page: singleton created');
     _currentIndex = ConfigureHomePage.currentPage;
   }
 
-  @override
-  Widget build(BuildContext context) {
-    print('home page: created !!!');
-    return Scaffold(
-      body: MorpheusTabView(
-          child: ConfigureHomePage.screens.elementAt(_currentIndex)),
-      bottomNavigationBar: FFNavigationBar(
-        theme: FFNavigationBarTheme(
-            barBackgroundColor: Colors.black12,
-            selectedItemBackgroundColor: AppThemeProvider()
-                .getTheme()
-                .bottomNavigationBarTheme
-                .backgroundColor),
-        selectedIndex: _currentIndex, // center
-        onSelectTab: _onItemTapped,
-        items: ConfigureHomePage.items,
-      ),
-    );
-  }
-
-  void _onItemTapped(int index) {
+  void setCurrentIndex(int index) {
     if (_currentIndex != index) {
       ConfigureHomePage.currentPage = _currentIndex;
-      setState(() {
-        _currentIndex = index;
-        CustomLogger.log('change pages!!!');
-      });
+      _currentIndex = index;
+      CustomLogger.log('change pages!!!');
+      notifyListeners();
     }
   }
 }
+
+class HomePage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    print('home page: created !!!');
+    PageIndexProvider pageIndexProvider = Provider.of<PageIndexProvider>(
+        context);
+    return Consumer<PageIndexProvider>(
+      builder: (context, value, child) =>
+          Scaffold(
+            body: MorpheusTabView(
+                child: ConfigureHomePage.screens.elementAt(
+                    pageIndexProvider.currentIndex)),
+            bottomNavigationBar: FFNavigationBar(
+              theme: FFNavigationBarTheme(
+                  barBackgroundColor: Colors.black12,
+                  selectedItemBackgroundColor: AppThemeProvider()
+                      .getTheme()
+                      .bottomNavigationBarTheme
+                      .backgroundColor),
+              selectedIndex: pageIndexProvider.currentIndex, // center
+              onSelectTab: pageIndexProvider.setCurrentIndex,
+              items: ConfigureHomePage.items,
+            ),
+          ),
+    );
+  }
+}
+
+// class HomePage extends StatefulWidget {
+//   @override
+//   _HomePageState createState() => _HomePageState();
+// }
+//
+// class _HomePageState extends State<HomePage> {
+//   int _currentIndex;
+//   static final _HomePageState _instance = _HomePageState._internal();
+//   factory _HomePageState() {
+//     CustomLogger.log('home page: singleton factory');
+//     return _instance;
+//   }
+//   _HomePageState._internal() {
+//     CustomLogger.log('home page: singleton created');
+//     _currentIndex = ConfigureHomePage.currentPage;
+//   }
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     print('home page: created !!!');
+//     PageIndexProvider pageIndexProvider = Provider.of<PageIndexProvider>(context);
+//     return Scaffold(
+//       body: MorpheusTabView(
+//           child: ConfigureHomePage.screens.elementAt(_currentIndex)),
+//       bottomNavigationBar: FFNavigationBar(
+//         theme: FFNavigationBarTheme(
+//             barBackgroundColor: Colors.black12,
+//             selectedItemBackgroundColor: AppThemeProvider()
+//                 .getTheme()
+//                 .bottomNavigationBarTheme
+//                 .backgroundColor),
+//         selectedIndex: _currentIndex, // center
+//         onSelectTab: _onItemTapped,
+//         items: ConfigureHomePage.items,
+//       ),
+//     );
+//   }
+//
+//   void _onItemTapped(int index) {
+//     if (_currentIndex != index) {
+//       ConfigureHomePage.currentPage = _currentIndex;
+//       setState(() {
+//         _currentIndex = index;
+//         CustomLogger.log('change pages!!!');
+//       });
+//     }
+//   }
+// }

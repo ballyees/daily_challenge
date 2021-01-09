@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:daily_challenge/src/Logger.dart';
+import 'package:daily_challenge/src/home/home.dart';
 import 'package:daily_challenge/src/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -29,6 +30,7 @@ class AppBarPages {
 
   static AppBar appBarGameHome(context) {
     AppThemeProvider appThemeProvider = Provider.of<AppThemeProvider>(context);
+    PageIndexProvider pageIndexProvider = Provider.of<PageIndexProvider>(context);
     double _appBarHeight = AppBar().preferredSize.height;
     double _itemSize = _appBarHeight * 0.75;
     double _spaceSize = _appBarHeight / 4;
@@ -61,6 +63,7 @@ class AppBarPages {
           width: _itemSize,
           child: RawMaterialButton(
             onPressed: () {
+              pageIndexProvider.setCurrentIndex(1);
               CustomLogger.log('to user profile');
             },
             elevation: 2.0,
