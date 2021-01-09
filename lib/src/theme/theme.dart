@@ -49,7 +49,8 @@ class DarkTheme {
 class AppThemeProvider with ChangeNotifier {
   static bool _isDarkTheme;
 
-  static bool get isDarkTheme => _isDarkTheme;
+  static bool get isDarkThemeStatic => _isDarkTheme;
+  bool get isDarkTheme => _isDarkTheme;
   static final String darkModeKey = 'darkMode';
 
   static final AppThemeProvider _instance = AppThemeProvider._internal();

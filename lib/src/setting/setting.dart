@@ -1,4 +1,5 @@
 import 'package:daily_challenge/src/Logger.dart';
+import 'package:daily_challenge/src/appbar/appbar.dart';
 import 'package:daily_challenge/src/setting/configure.dart';
 import 'package:daily_challenge/src/theme/theme.dart';
 import 'package:flutter/material.dart';
@@ -11,9 +12,7 @@ class SettingPage extends StatelessWidget {
     double _paddingTop = MediaQuery.of(context).size.height / 10;
     AppThemeProvider appThemeProvider = Provider.of<AppThemeProvider>(context);
     return Scaffold(
-      appBar: AppBar(
-        title: ConfigureSettingPage.appBarTitle,
-      ),
+      appBar: AppBarPages.appBarSetting(context),
       body: Container(
           alignment: Alignment.topCenter,
           padding: EdgeInsets.fromLTRB(0, _paddingTop, 0, 0),

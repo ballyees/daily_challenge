@@ -25,7 +25,8 @@ class MyApp extends StatelessWidget {
             print('app created');
             bool isDarkMode =
                 snapshot.data.getBool(AppThemeProvider.darkModeKey) ??
-                    (SchedulerBinding.instance.window.platformBrightness == Brightness.dark);
+                    (SchedulerBinding.instance.window.platformBrightness ==
+                        Brightness.dark);
             return MultiProvider(
                 providers: [
                   ChangeNotifierProvider.value(value: CounterProvider()),
@@ -35,7 +36,7 @@ class MyApp extends StatelessWidget {
                     title: 'Daily Challenge',
                     theme: appThemeProvider.getTheme(isDarkMode: isDarkMode),
                     darkTheme:
-                    appThemeProvider.getTheme(isDarkMode: isDarkMode),
+                        appThemeProvider.getTheme(isDarkMode: isDarkMode),
                     home: HomePage(),
                   ),
                 ));
@@ -70,8 +71,12 @@ class _HomePageState extends State<HomePage> {
       body: MorpheusTabView(
           child: ConfigureHomePage.screens.elementAt(_currentIndex)),
       bottomNavigationBar: FFNavigationBar(
-        theme:
-        FFNavigationBarTheme(barBackgroundColor: Colors.black12, selectedItemBackgroundColor: AppThemeProvider().getTheme().bottomNavigationBarTheme.backgroundColor),
+        theme: FFNavigationBarTheme(
+            barBackgroundColor: Colors.black12,
+            selectedItemBackgroundColor: AppThemeProvider()
+                .getTheme()
+                .bottomNavigationBarTheme
+                .backgroundColor),
         selectedIndex: _currentIndex, // center
         onSelectTab: _onItemTapped,
         items: ConfigureHomePage.items,
