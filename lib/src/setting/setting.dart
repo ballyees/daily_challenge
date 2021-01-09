@@ -9,7 +9,7 @@ class SettingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double _width = MediaQuery.of(context).size.width / 1.25;
-    double _paddingTop = MediaQuery.of(context).size.height / 10;
+    double _paddingTop = MediaQuery.of(context).size.height / 15;
     AppThemeProvider appThemeProvider = Provider.of<AppThemeProvider>(context);
     return Scaffold(
       appBar: AppBarPages.appBarSetting(context),

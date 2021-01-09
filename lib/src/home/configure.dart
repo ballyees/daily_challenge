@@ -1,4 +1,5 @@
 import 'package:daily_challenge/src/custom_icons/counter.dart';
+import 'package:daily_challenge/src/game/home/game_home.dart';
 import 'package:daily_challenge/src/setting/setting.dart';
 import 'package:ff_navigation_bar/ff_navigation_bar_item.dart';
 import 'package:flutter/material.dart';
@@ -7,11 +8,12 @@ import 'package:provider/provider.dart';
 
 class ConfigureHomePage {
   static bool isDark = false;
+  static int currentPage = 2;
   static const appName = 'Daily Challenge';
   /// App screens
-  static final List<Widget> screens  = <Widget>[
+  static final List<Object> screens  = <Object>[
+    GameHome(),
     ChangeNotifierProvider.value(child: CounterPage(), value: CounterProvider(),),
-    Scaffold(backgroundColor: Colors.red),
     Scaffold(backgroundColor: Colors.blue),
     Scaffold(backgroundColor: Colors.black),
     SettingPage()

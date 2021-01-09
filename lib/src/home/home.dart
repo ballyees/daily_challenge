@@ -47,21 +47,26 @@ class MyApp extends StatelessWidget {
   }
 }
 
+class PageIndexProvider extends ValueNotifier<int>{
+  PageIndexProvider(int currentIndex) : super(currentIndex);
+
+}
+
 class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
+  int _currentIndex;
   static final _HomePageState _instance = _HomePageState._internal();
   factory _HomePageState() {
     CustomLogger.log('home page: singleton factory');
     return _instance;
   }
-  int _currentIndex;
   _HomePageState._internal() {
     CustomLogger.log('home page: singleton created');
-    _currentIndex = 2;
+    _currentIndex = ConfigureHomePage.currentPage;
   }
 
   @override
@@ -86,6 +91,7 @@ class _HomePageState extends State<HomePage> {
 
   void _onItemTapped(int index) {
     if (_currentIndex != index) {
+      ConfigureHomePage.currentPage = _currentIndex;
       setState(() {
         _currentIndex = index;
         CustomLogger.log('change pages!!!');
