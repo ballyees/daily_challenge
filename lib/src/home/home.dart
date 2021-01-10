@@ -1,5 +1,6 @@
 import 'package:daily_challenge/src/Logger.dart';
 import 'package:daily_challenge/src/custom_icons/counter.dart';
+import 'package:daily_challenge/src/game/ask/ask_question.dart';
 import 'package:daily_challenge/src/preference_utils.dart';
 import 'package:daily_challenge/src/theme/theme.dart';
 import 'package:ff_navigation_bar/ff_navigation_bar.dart';
@@ -31,6 +32,8 @@ class MyApp extends StatelessWidget {
                 providers: [
                   ChangeNotifierProvider.value(value: CounterProvider()),
                   ChangeNotifierProvider.value(value: PageIndexProvider()),
+                  // ChangeNotifierProvider.value(value: AskQuestionProvider()),
+                  Provider.value(value: AskQuestionProvider()),
                 ],
                 child: Consumer<AppThemeProvider>(
                   builder: (context, data, child) => MaterialApp(

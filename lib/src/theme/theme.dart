@@ -60,7 +60,6 @@ class AppThemeProvider with ChangeNotifier {
   }
 
   AppThemeProvider._internal() {
-    // _isDarkTheme = true;
     CustomLogger.log('AppTheme: singleton created');
   }
 

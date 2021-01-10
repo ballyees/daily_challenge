@@ -13,7 +13,7 @@ class CounterProvider with ChangeNotifier {
   }
 
   CounterProvider._internal() {
-    counter = 0;
+    // counter = 0;
     CustomLogger.log('counter provider: singleton created');
   }
 
