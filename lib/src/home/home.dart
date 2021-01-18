@@ -1,6 +1,6 @@
 import 'package:daily_challenge/src/Logger.dart';
 import 'package:daily_challenge/src/custom_icons/counter.dart';
-import 'package:daily_challenge/src/game/ask/ask_question.dart';
+import 'package:daily_challenge/src/game/ask/ask_question_privider.dart';
 import 'package:daily_challenge/src/preference_utils.dart';
 import 'package:daily_challenge/src/theme/theme.dart';
 import 'package:ff_navigation_bar/ff_navigation_bar.dart';
@@ -37,6 +37,7 @@ class MyApp extends StatelessWidget {
                 ],
                 child: Consumer<AppThemeProvider>(
                   builder: (context, data, child) => MaterialApp(
+                    debugShowCheckedModeBanner: false,
                     title: 'Daily Challenge',
                     theme: appThemeProvider.getTheme(isDarkMode: isDarkMode),
                     darkTheme:
