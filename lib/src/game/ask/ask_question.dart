@@ -1,3 +1,4 @@
+import 'package:daily_challenge/src/Logger.dart';
 import 'package:daily_challenge/src/appbar/appbar.dart';
 import 'package:daily_challenge/src/game/ask/ask_question_privider.dart';
 import 'package:flutter/material.dart';
@@ -9,8 +10,8 @@ class AskQuestion extends StatefulWidget {
 }
 
 class _AskQuestionState extends State<AskQuestion> {
-  final _listKey = GlobalKey<AnimatedListState>();
-  final _formKey = GlobalKey<FormState>();
+  GlobalKey<AnimatedListState> _listKey = GlobalKey<AnimatedListState>();
+  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -35,12 +36,33 @@ class _AskQuestionState extends State<AskQuestion> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        'QUESTION',
-                        textAlign: TextAlign.left,
-                        style: TextStyle(
-                          fontSize: _textSize,
-                        ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'QUESTION',
+                            textAlign: TextAlign.left,
+                            style: TextStyle(
+                              fontSize: _textSize,
+                            ),
+                          ),
+                          OutlineButton(
+                            onPressed: () {
+                              askQuestionProvider.settingField();
+                              askQuestionProvider.notify();
+                            },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text('Clear'),
+                                Icon(Icons.clear)
+                              ],
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                        ],
                       ),
                       Padding(
                         padding: EdgeInsets.symmetric(
@@ -50,9 +72,10 @@ class _AskQuestionState extends State<AskQuestion> {
                           value: askQuestionProvider,
                           child: Consumer<AskQuestionProvider>(
                             builder: (context, value, child) => TextFormField(
-                              autofocus: !(askQuestionProvider.hasAnswer),
+                              minLines: 1,
+                              maxLines: 100,
+                              // autofocus: !(askQuestionProvider.hasAnswer),
                               onChanged: (value) {
-                                print(askQuestionProvider.hasAnswer);
                                 askQuestionProvider.notify();
                               },
                               controller:
@@ -102,28 +125,18 @@ class _AskQuestionState extends State<AskQuestion> {
                                 value: askQuestionProvider,
                                 child: Consumer<AskQuestionProvider>(
                                   builder: (context, value, child) =>
-                                      //     ListView.builder(
-                                      //   shrinkWrap: true,
-                                      //   itemCount: value.answerControllers.length,
-                                      //   itemBuilder: (context, index) =>
-                                      //       askQuestionProvider
-                                      //           .mapAnswerControllerListBuilder(
-                                      //               context,
-                                      //               _paddingVertical,
-                                      //               index),
-                                      // ),
                                       AnimatedList(
                                         controller: ScrollController(
-                                          initialScrollOffset: 2
+                                          initialScrollOffset: 0
                                         ),
                                     shrinkWrap: true,
                                     key: _listKey,
                                     initialItemCount:
                                         value.answerControllers.length,
                                     itemBuilder: (context, index, animation) =>
-                                        value
-                                            .mapAnswerControllerAnimationBuilder(
+                                        _mapAnswerControllerAnimationBuilder(
                                                 context,
+                                                askQuestionProvider,
                                                 _paddingVertical,
                                                 index,
                                                 animation,
@@ -163,11 +176,11 @@ class _AskQuestionState extends State<AskQuestion> {
                             alignment: Alignment.bottomRight,
                             child: Builder(
                               builder: (context) => RaisedButton(
-                                onPressed: () {
+                                onPressed: () async {
                                   if (_formKey.currentState.validate()) {
+                                    askQuestionProvider.onSubmit();
                                     Scaffold.of(context).showSnackBar(SnackBar(
                                         content: Text('Processing Data')));
-                                    askQuestionProvider.onSubmit();
                                     Navigator.of(context).pop();
                                     Navigator.of(context).push(MaterialPageRoute(
                                       builder: (context) => AskQuestion(),
@@ -191,4 +204,65 @@ class _AskQuestionState extends State<AskQuestion> {
       ),
     );
   }
+
+  Widget _mapAnswerControllerAnimationBuilder(context, AskQuestionProvider askQuestionProvider, double paddingVertical, int index, Animation<double> animation, TextEditingController controller, GlobalKey<AnimatedListState> listKey) {
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: paddingVertical),
+      child: ScaleTransition(
+        scale: animation,
+        child: Row(
+          children: [
+            Radio(
+              groupValue: askQuestionProvider.formAnswerIndex,
+              value: index,
+              onChanged: (value) {
+                CustomLogger.log('answer index: $value');
+                askQuestionProvider.setFormAnswerIndex(value);
+              },
+            ),
+            Expanded(
+              child: SizedBox(
+                child: TextFormField(
+                  controller: controller,
+                  minLines: 1,
+                  maxLines: 100,
+                  onChanged: (value) {
+                    askQuestionProvider.notify();
+                  },
+                  decoration: InputDecoration(
+                    suffixIcon: controller.text != ''
+                        ? IconButton(
+                      onPressed: () {
+                        askQuestionProvider.clearAnswerController(index);
+                      },
+                      icon: Icon(Icons.clear),
+                    )
+                        : null,
+                    hintText: "Enter your answer here",
+                    border: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.amber),
+                        borderRadius: BorderRadius.circular(5)),
+                  ),
+                  validator: (value) {
+                    if (value.isEmpty) {
+                      return 'Please enter your answer';
+                    }
+                    return null;
+                  },
+                ),
+              ),
+            ),
+            IconButton(
+                icon: Icon(
+                  Icons.delete,
+                ),
+                onPressed: () {
+                  askQuestionProvider.deleteAnswerControllerAnimation(context, index, 700, paddingVertical, listKey);
+                }),
+          ],
+        ),
+      ),
+    );
+  }
 }
+

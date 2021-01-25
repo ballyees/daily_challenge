@@ -1,5 +1,6 @@
 import 'package:daily_challenge/src/Logger.dart';
 import 'package:daily_challenge/src/appbar/appbar.dart';
+import 'package:daily_challenge/src/game/answer/answer_question.dart';
 import 'package:daily_challenge/src/game/ask/ask_question.dart';
 import 'package:flutter/material.dart';
 
@@ -50,7 +51,7 @@ class GameHome extends StatelessWidget {
                         builder: (context) => AskQuestion(),
                       ),
                       );
-                      CustomLogger.log('ask');
+                      CustomLogger.log('Ask');
                     },
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(25.0),
@@ -68,6 +69,9 @@ class GameHome extends StatelessWidget {
                       'Answer me',
                     ),
                     onPressed: () {
+                      Navigator.push(context, MaterialPageRoute(
+                        builder: (context) => AnswerQuestion(),
+                      ));
                       CustomLogger.log('Answer');
                     },
                     shape: RoundedRectangleBorder(

@@ -1,5 +1,9 @@
+import 'dart:convert';
+
+import 'package:daily_challenge/src/ApiConfigure.dart';
 import 'package:daily_challenge/src/Logger.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 
 
 class AskQuestionProvider with ChangeNotifier {
@@ -9,6 +13,10 @@ class AskQuestionProvider with ChangeNotifier {
   bool _hasAnswer;
 
   int get formAnswerIndex => _formAnswerIndex;
+  void setFormAnswerIndex(int value) {
+    _formAnswerIndex = value;
+    notifyListeners();
+  }
   bool get hasAnswer => _hasAnswer;
   TextEditingController get questionController => _questionController;
   List<TextEditingController> get answerControllers => _answerControllers;
@@ -23,95 +31,19 @@ class AskQuestionProvider with ChangeNotifier {
     _hasAnswer = isAnswerCall;
     notifyListeners();
   }
-  void onSubmit(){
+
+  Future<int> onSubmit() async {
+    List _answer = [];
     print(_questionController.text);
-    _answerControllers.forEach((controller) {
-      print(controller.text);
+    // ignore: unnecessary_statements, missing_return
+    _answerControllers.asMap().forEach((index, controller) {
+      _answer.add({controller.text: _formAnswerIndex==index});
     });
+    Response response = await post(ApiConfigure.questionApi, body: jsonEncode({'question': _questionController.text, 'choice': _answer}));
     clearController();
     settingField();
     notifyListeners();
-  }
-
-  void addAnswerController() {
-    answerControllers.add(TextEditingController());
-    CustomLogger.log('Controller Created');
-    notifyListeners();
-  }
-
-  void deleteAnswerController(context, int index, deleteDuration) {
-    if (answerControllers.length > 2) {
-      CustomLogger.log('delete index: $index');
-      TextEditingController item = answerControllers.removeAt(index);
-      Scaffold.of(context).showSnackBar(SnackBar(
-          duration: Duration(milliseconds: deleteDuration),
-          content: Text("answer ${index + 1}: ${item.text} remove")));
-
-      if ((_formAnswerIndex < index) && (_formAnswerIndex > 1)) {
-        _formAnswerIndex = index - 1;
-      }
-      notifyListeners();
-    } else {
-      Scaffold.of(context).showSnackBar(SnackBar(
-          duration: Duration(milliseconds: deleteDuration),
-          content: Text("can't remove the answer")));
-    }
-  }
-
-  Widget mapAnswerControllerListBuilder(context, paddingVertical, index) {
-    return Padding(
-      padding: EdgeInsets.symmetric(vertical: paddingVertical),
-      child: Row(
-        children: [
-          Radio(
-            groupValue: _formAnswerIndex,
-            value: index,
-            onChanged: (value) {
-              CustomLogger.log('answer index: $value');
-              _formAnswerIndex = value;
-              notifyListeners();
-            },
-          ),
-          Expanded(
-            child: SizedBox(
-              child: TextFormField(
-                controller: _answerControllers[index],
-                onChanged: (value) {
-                  notifyListeners();
-                },
-                decoration: InputDecoration(
-                  suffixIcon: _answerControllers[index].text != ''
-                      ? IconButton(
-                    onPressed: () {
-                      clearAnswerController(index);
-                    },
-                    icon: Icon(Icons.clear),
-                  )
-                      : null,
-                  hintText: "Enter your answer here",
-                  border: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.amber),
-                      borderRadius: BorderRadius.circular(5)),
-                ),
-                validator: (value) {
-                  if (value.isEmpty) {
-                    return 'Please enter your answer';
-                  }
-                  return null;
-                },
-              ),
-            ),
-          ),
-          IconButton(
-              icon: Icon(
-                Icons.delete,
-              ),
-              onPressed: () {
-                deleteAnswerController(context, index, 700);
-              }),
-        ],
-      ),
-    );
+    return response.statusCode;
   }
 
   void addAnswerControllerAnimation(GlobalKey<AnimatedListState> listKey) {
@@ -125,12 +57,12 @@ class AskQuestionProvider with ChangeNotifier {
     if (answerControllers.length > 2) {
       CustomLogger.log('delete index: $index');
       TextEditingController controller = answerControllers.removeAt(index);
-      listKey.currentState.removeItem(index, (context, animation) => mapAnswerControllerAnimationRemove(context, paddingVertical, animation, controller));
+      listKey.currentState.removeItem(index, (context, animation) => _mapAnswerControllerAnimationRemove(context, paddingVertical, animation, controller));
       Scaffold.of(context).showSnackBar(SnackBar(
           duration: Duration(milliseconds: deleteDuration),
           content: Text("answer ${index + 1}: ${controller.text} remove")));
 
-      if ((_formAnswerIndex < index) && (_formAnswerIndex > 1)) {
+      if ((_formAnswerIndex <= index) && (_formAnswerIndex > 1)) {
         _formAnswerIndex = index - 1;
       }
       notifyListeners();
@@ -141,7 +73,7 @@ class AskQuestionProvider with ChangeNotifier {
     }
   }
 
-  Widget mapAnswerControllerAnimationRemove(context, paddingVertical, Animation<double> animation, TextEditingController controller){
+  Widget _mapAnswerControllerAnimationRemove(context, paddingVertical, Animation<double> animation, TextEditingController controller){
     return Padding(
       padding: EdgeInsets.symmetric(vertical: paddingVertical),
       child: ScaleTransition(
@@ -158,7 +90,7 @@ class AskQuestionProvider with ChangeNotifier {
                 child: TextFormField(
                   controller: controller,
                   onChanged: (value) {
-                    setHasAnswer(true);
+                    // setHasAnswer(true);
                     // notifyListeners();
                   },
                   decoration: InputDecoration(
@@ -188,65 +120,6 @@ class AskQuestionProvider with ChangeNotifier {
                   Icons.delete,
                 ),
                 onPressed: () {
-                }),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget mapAnswerControllerAnimationBuilder(context, double paddingVertical, int index, Animation<double> animation, TextEditingController controller, GlobalKey<AnimatedListState> listKey) {
-    return Padding(
-      padding: EdgeInsets.symmetric(vertical: paddingVertical),
-      child: ScaleTransition(
-        scale: animation,
-        child: Row(
-          children: [
-            Radio(
-              groupValue: _formAnswerIndex,
-              value: index,
-              onChanged: (value) {
-                CustomLogger.log('answer index: $value');
-                _formAnswerIndex = value;
-                notifyListeners();
-              },
-            ),
-            Expanded(
-              child: SizedBox(
-                child: TextFormField(
-                  controller: controller,
-                  onChanged: (value) {
-                    notifyListeners();
-                  },
-                  decoration: InputDecoration(
-                    suffixIcon: controller.text != ''
-                        ? IconButton(
-                      onPressed: () {
-                        clearAnswerController(index);
-                      },
-                      icon: Icon(Icons.clear),
-                    )
-                        : null,
-                    hintText: "Enter your answer here",
-                    border: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.amber),
-                        borderRadius: BorderRadius.circular(5)),
-                  ),
-                  validator: (value) {
-                    if (value.isEmpty) {
-                      return 'Please enter your answer';
-                    }
-                    return null;
-                  },
-                ),
-              ),
-            ),
-            IconButton(
-                icon: Icon(
-                  Icons.delete,
-                ),
-                onPressed: () {
-                  deleteAnswerControllerAnimation(context, index, 700, paddingVertical, listKey);
                 }),
           ],
         ),

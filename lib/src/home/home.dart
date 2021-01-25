@@ -1,5 +1,6 @@
 import 'package:daily_challenge/src/Logger.dart';
 import 'package:daily_challenge/src/custom_icons/counter.dart';
+import 'package:daily_challenge/src/game/answer/answer_question_provider.dart';
 import 'package:daily_challenge/src/game/ask/ask_question_privider.dart';
 import 'package:daily_challenge/src/preference_utils.dart';
 import 'package:daily_challenge/src/theme/theme.dart';
@@ -28,12 +29,14 @@ class MyApp extends StatelessWidget {
                 snapshot.data.getBool(AppThemeProvider.darkModeKey) ??
                     (SchedulerBinding.instance.window.platformBrightness ==
                         Brightness.dark);
+
             return MultiProvider(
                 providers: [
                   ChangeNotifierProvider.value(value: CounterProvider()),
                   ChangeNotifierProvider.value(value: PageIndexProvider()),
-                  // ChangeNotifierProvider.value(value: AskQuestionProvider()),
                   Provider.value(value: AskQuestionProvider()),
+                  // ChangeNotifierProvider(create: (context) => AnswerQuestionProvider(),)
+                  Provider.value(value: AnswerQuestionProvider()),
                 ],
                 child: Consumer<AppThemeProvider>(
                   builder: (context, data, child) => MaterialApp(
@@ -46,7 +49,7 @@ class MyApp extends StatelessWidget {
                   ),
                 ));
           } else {
-            return CircularProgressIndicator();
+            return Center(child: CircularProgressIndicator());
           }
         });
   }
@@ -80,26 +83,25 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     print('home page: created !!!');
-    PageIndexProvider pageIndexProvider = Provider.of<PageIndexProvider>(
-        context);
+    PageIndexProvider pageIndexProvider =
+        Provider.of<PageIndexProvider>(context);
     return Consumer<PageIndexProvider>(
-      builder: (context, value, child) =>
-          Scaffold(
-            body: MorpheusTabView(
-                child: ConfigureHomePage.screens.elementAt(
-                    pageIndexProvider.currentIndex)),
-            bottomNavigationBar: FFNavigationBar(
-              theme: FFNavigationBarTheme(
-                  barBackgroundColor: Colors.black12,
-                  selectedItemBackgroundColor: AppThemeProvider()
-                      .getTheme()
-                      .bottomNavigationBarTheme
-                      .backgroundColor),
-              selectedIndex: pageIndexProvider.currentIndex, // center
-              onSelectTab: pageIndexProvider.setCurrentIndex,
-              items: ConfigureHomePage.items,
-            ),
-          ),
+      builder: (context, value, child) => Scaffold(
+        body: MorpheusTabView(
+            child: ConfigureHomePage.screens
+                .elementAt(pageIndexProvider.currentIndex)),
+        bottomNavigationBar: FFNavigationBar(
+          theme: FFNavigationBarTheme(
+              barBackgroundColor: Colors.black12,
+              selectedItemBackgroundColor: AppThemeProvider()
+                  .getTheme()
+                  .bottomNavigationBarTheme
+                  .backgroundColor),
+          selectedIndex: pageIndexProvider.currentIndex, // center
+          onSelectTab: pageIndexProvider.setCurrentIndex,
+          items: ConfigureHomePage.items,
+        ),
+      ),
     );
   }
 }
