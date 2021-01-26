@@ -40,6 +40,7 @@ class AskQuestionProvider with ChangeNotifier {
       _answer.add({controller.text: _formAnswerIndex==index});
     });
     Response response = await post(ApiConfigure.questionApi, body: jsonEncode({'question': _questionController.text, 'choice': _answer}));
+    _formAnswerIndex = 0;
     clearController();
     settingField();
     notifyListeners();

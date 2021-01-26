@@ -43,7 +43,7 @@ class AnswerQuestionProvider with ChangeNotifier {
     });
   }
 
-  Future<void> removeCurrentQuestion() async {
+  Future<bool> removeCurrentQuestion() async {
     _questions.removeFirst();
     bool request = true;
     if(_questions.isEmpty){
@@ -59,21 +59,18 @@ class AnswerQuestionProvider with ChangeNotifier {
     return _questions.first;
   }
 
-  bool onSubmit(){
+  Map onSubmit(){
     Map question = getCurrentQuestion();
     Map choice = question['choice'].elementAt(selectChoice);
+    Map correctChoice = (question['choice'] as List).where((element) => element[element.keys.first]).toList()[0];
     removeCurrentQuestion();
     /// reset select item
     selectChoice = 0;
-    return choice[choice.keys.first];
+    return {'isCorrect': choice[choice.keys.first], 'correctChoice': correctChoice};
   }
 
   void notify(){
     notifyListeners();
   }
 
-  // @override
-  // void dispose() {
-  //   CustomLogger.log('call dummy dispose');
-  // }
 }

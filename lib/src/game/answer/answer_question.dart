@@ -1,4 +1,7 @@
+import 'dart:ui';
+
 import 'package:daily_challenge/src/ApiConfigure.dart';
+import 'package:daily_challenge/src/Logger.dart';
 import 'package:daily_challenge/src/appbar/appbar.dart';
 import 'package:daily_challenge/src/game/answer/answer_question_provider.dart';
 import 'package:flutter/material.dart';
@@ -22,14 +25,14 @@ class _AnswerQuestionState extends State<AnswerQuestion> {
     print('answer page: create');
     return Scaffold(
         appBar: AppBarPages.appBarAnswerQuestion(context),
-        body: FutureBuilder(
-          future: answerQuestionProvider.requestQuestion(),
-          builder: (context, snapshot) {
-            print(snapshot.hasData);
-            if (snapshot.hasData) {
-              return ChangeNotifierProvider.value(
-                value: answerQuestionProvider,
-                child: Consumer<AnswerQuestionProvider>(
+        body: ChangeNotifierProvider.value(
+          value: answerQuestionProvider,
+          child: FutureBuilder(
+            future: answerQuestionProvider.requestQuestion(),
+            builder: (context, snapshot) {
+              CustomLogger.log('request has data: ${snapshot.hasData.toString()}');
+              if (snapshot.hasData) {
+                return Consumer<AnswerQuestionProvider>(
                   builder: (context, value, child) {
                     if (answerQuestionProvider.questions.isEmpty) {
                       reassemble();
@@ -44,12 +47,12 @@ class _AnswerQuestionState extends State<AnswerQuestion> {
                         _paddingVertical,
                         setState);
                   },
-                ),
-              );
-            } else {
-              return Center(child: CircularProgressIndicator());
-            }
-          },
+                );
+              } else {
+                return Center(child: CircularProgressIndicator());
+              }
+            },
+          ),
         ));
   }
 
@@ -63,6 +66,11 @@ class _AnswerQuestionState extends State<AnswerQuestion> {
       setState) {
     Map question = answerQuestionProvider.getCurrentQuestion();
     List choice = question[ApiConfigure.choiceKey] as List;
+    if (choice == null) {
+      CustomLogger.log('call outline');
+      answerQuestionProvider.removeCurrentQuestion();
+      return Container();
+    }
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -89,8 +97,7 @@ class _AnswerQuestionState extends State<AnswerQuestion> {
                       minLines: 1,
                       maxLines: 100,
                       controller: TextEditingController(
-                        text: question[ApiConfigure.questionKey]
-                      ),
+                          text: question[ApiConfigure.questionKey]),
                       decoration: InputDecoration(
                         border: OutlineInputBorder(
                             borderSide: BorderSide(color: Colors.amber),
@@ -140,7 +147,11 @@ class _AnswerQuestionState extends State<AnswerQuestion> {
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10)),
                       onPressed: () {
-                        answerQuestionProvider.onSubmit();
+                        showDialog(
+                          context: context,
+                          builder: (context) => _blurDialog(
+                              context, answerQuestionProvider.onSubmit()),
+                        );
                       },
                     ),
                   ),
@@ -152,5 +163,31 @@ class _AnswerQuestionState extends State<AnswerQuestion> {
       ),
     );
     // return ChangeNotifierProvider.value(value: null);
+  }
+
+  Widget _blurDialog(context, Map choice) {
+    String message = (choice['correctChoice'] as Map).keys.first;
+    String title = 'correct';
+    if (choice['isCorrect']) {
+      message += ' is answer';
+    } else {
+      title = 'incorrect';
+      message = 'the answer is ' + message;
+    }
+    return BackdropFilter(
+      filter: ImageFilter.blur(sigmaX: 6, sigmaY: 6),
+      child: AlertDialog(
+        title: Text(title),
+        content: Text(message),
+        actions: [
+          FlatButton(
+            child: Text('OK'),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          )
+        ],
+      ),
+    );
   }
 }
