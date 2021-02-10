@@ -3,8 +3,10 @@ import 'dart:convert';
 
 import 'package:daily_challenge/src/ApiConfigure.dart';
 import 'package:daily_challenge/src/Logger.dart';
+import 'package:daily_challenge/src/game/status.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
+
 
 class AnswerQuestionProvider with ChangeNotifier {
   static final AnswerQuestionProvider _instance =
@@ -12,6 +14,7 @@ class AnswerQuestionProvider with ChangeNotifier {
   Queue _questions;
   int selectChoice;
   int stack;
+  Status status;
   Queue get questions => _questions;
 
   factory AnswerQuestionProvider() {
@@ -22,12 +25,14 @@ class AnswerQuestionProvider with ChangeNotifier {
   AnswerQuestionProvider._internal() {
     _questions = Queue();
     selectChoice = 0;
+    status = Status.onLoad;
     stack = 0;
     CustomLogger.log('AnswerQuestionProvider: singleton created');
   }
 
   void refreshQuestion(){
     _questions.clear();
+    status = Status.onLoad;
     requestQuestion();
     notifyListeners();
   }
@@ -52,7 +57,6 @@ class AnswerQuestionProvider with ChangeNotifier {
     }
     notifyListeners();
     return request;
-
   }
 
   Map getCurrentQuestion() {
@@ -61,12 +65,13 @@ class AnswerQuestionProvider with ChangeNotifier {
 
   Map onSubmit(){
     Map question = getCurrentQuestion();
+    status = Status.onSubmit;
     Map choice = question['choice'].elementAt(selectChoice);
     Map correctChoice = (question['choice'] as List).where((element) => element[element.keys.first]).toList()[0];
     removeCurrentQuestion();
     /// reset select item
     selectChoice = 0;
-    return {'isCorrect': choice[choice.keys.first], 'correctChoice': correctChoice};
+    return {'isCorrect': choice[choice.keys.first], 'correctChoice': correctChoice, 'question': question};
   }
 
   void notify(){

@@ -8,6 +8,7 @@ import 'package:http/http.dart';
 
 class AskQuestionProvider with ChangeNotifier {
   TextEditingController _questionController;
+  TextEditingController _hintController;
   int _formAnswerIndex;
   List<TextEditingController> _answerControllers;
   bool _hasAnswer;
@@ -19,10 +20,13 @@ class AskQuestionProvider with ChangeNotifier {
   }
   bool get hasAnswer => _hasAnswer;
   TextEditingController get questionController => _questionController;
+  TextEditingController get hintController => _hintController;
   List<TextEditingController> get answerControllers => _answerControllers;
   void clearController(){
     _answerControllers.clear();
     _questionController.clear();
+    _hintController.clear();
+    _hintController = null;
     _answerControllers = null;
     _questionController = null;
   }
@@ -37,13 +41,11 @@ class AskQuestionProvider with ChangeNotifier {
     print(_questionController.text);
     // ignore: unnecessary_statements, missing_return
     _answerControllers.asMap().forEach((index, controller) {
+      print({controller.text: _formAnswerIndex==index});
       _answer.add({controller.text: _formAnswerIndex==index});
     });
-    Response response = await post(ApiConfigure.questionApi, body: jsonEncode({'question': _questionController.text, 'choice': _answer}));
+    Response response = await post(ApiConfigure.questionApi, body: jsonEncode({'question': _questionController.text, 'choice': _answer, 'hint': _hintController.text}));
     _formAnswerIndex = 0;
-    clearController();
-    settingField();
-    notifyListeners();
     return response.statusCode;
   }
 
@@ -138,12 +140,24 @@ class AskQuestionProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void clearHintController() {
+    hintController.clear();
+    notifyListeners();
+  }
+
+  void clearAll(){
+    clearController();
+    settingField();
+    notifyListeners();
+  }
+
   void notify(){
     notifyListeners();
   }
 
   void settingField() {
     _questionController = TextEditingController();
+    _hintController = TextEditingController();
     _formAnswerIndex = 0;
     _hasAnswer = false;
     _answerControllers = <TextEditingController>[

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class CounterProvider with ChangeNotifier {
-  int counter = 0;
+  int counter;
 
   static final CounterProvider _instance = CounterProvider._internal();
 
@@ -13,7 +13,7 @@ class CounterProvider with ChangeNotifier {
   }
 
   CounterProvider._internal() {
-    // counter = 0;
+    counter = 0;
     CustomLogger.log('counter provider: singleton created');
   }
 
@@ -42,6 +42,7 @@ class CounterPage extends StatelessWidget {
           Consumer<CounterProvider>(
               builder: (context, data, child) =>
                   buildText(context, counterProvider.counter)),
+
           ],
         ),
       ),
