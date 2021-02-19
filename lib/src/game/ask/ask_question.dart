@@ -48,8 +48,8 @@ class _AskQuestionState extends State<AskQuestion> {
                           ),
                           OutlineButton(
                             onPressed: () {
-                              askQuestionProvider.clearAll();
-                              setState(() {});
+                              askQuestionProvider.settingField();
+                              askQuestionProvider.notify();
                             },
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -74,10 +74,9 @@ class _AskQuestionState extends State<AskQuestion> {
                             builder: (context, value, child) => TextFormField(
                               minLines: 1,
                               maxLines: 100,
+                              // autofocus: !(askQuestionProvider.hasAnswer),
                               onChanged: (value) {
-                                if(value.length < 2){
-                                  askQuestionProvider.notify();
-                                }
+                                askQuestionProvider.notify();
                               },
                               controller:
                                   askQuestionProvider.questionController,
@@ -109,50 +108,6 @@ class _AskQuestionState extends State<AskQuestion> {
                         ),
                       ),
                       Text(
-                        'Hint',
-                        textAlign: TextAlign.left,
-                        style: TextStyle(
-                          fontSize: _textSize,
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(
-                            vertical: _paddingVertical,
-                            horizontal: _paddingHorizontal),
-                        child: ChangeNotifierProvider.value(
-                          value: askQuestionProvider,
-                          child: Consumer<AskQuestionProvider>(
-                            builder: (context, value, child) => TextFormField(
-                              minLines: 1,
-                              maxLines: 100,
-                              onChanged: (value) {
-                                if(value.length < 2){
-                                  askQuestionProvider.notify();
-                                }
-                              },
-                              controller:
-                              askQuestionProvider.hintController,
-                              decoration: InputDecoration(
-                                suffixIcon: askQuestionProvider.hintController.text !=
-                                    ''
-                                    ? IconButton(
-                                  onPressed: () {
-                                    askQuestionProvider
-                                        .clearHintController();
-                                  },
-                                  icon: Icon(Icons.clear),
-                                )
-                                    : null,
-                                hintText: "Enter your hint here (optional)",
-                                border: OutlineInputBorder(
-                                    borderSide: BorderSide(color: Colors.amber),
-                                    borderRadius: BorderRadius.circular(5)),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      Text(
                         'ANSWER',
                         textAlign: TextAlign.left,
                         style: TextStyle(
@@ -169,18 +124,16 @@ class _AskQuestionState extends State<AskQuestion> {
                               ChangeNotifierProvider.value(
                                 value: askQuestionProvider,
                                 child: Consumer<AskQuestionProvider>(
-                                  builder: (context, value, child) {
-                                    int size = value.answerControllers.length;
-                                    return AnimatedList(
+                                  builder: (context, value, child) =>
+                                      AnimatedList(
                                         controller: ScrollController(
                                           initialScrollOffset: 0
                                         ),
                                     shrinkWrap: true,
                                     key: _listKey,
                                     initialItemCount:
-                                        size,
+                                        value.answerControllers.length,
                                     itemBuilder: (context, index, animation) =>
-                                    (index < size)?
                                         _mapAnswerControllerAnimationBuilder(
                                                 context,
                                                 askQuestionProvider,
@@ -188,10 +141,8 @@ class _AskQuestionState extends State<AskQuestion> {
                                                 index,
                                                 animation,
                                                 value.answerControllers[index],
-                                                _listKey):
-                                      null,
-                                  );
-                                  },
+                                                _listKey),
+                                  ),
                                 ),
                               ),
                               OutlineButton(
@@ -234,7 +185,6 @@ class _AskQuestionState extends State<AskQuestion> {
                                     Navigator.of(context).push(MaterialPageRoute(
                                       builder: (context) => AskQuestion(),
                                     ));
-                                    askQuestionProvider.clearAll();
                                   }
                                 },
                                 child: Text('SUBMIT'),
@@ -256,7 +206,6 @@ class _AskQuestionState extends State<AskQuestion> {
   }
 
   Widget _mapAnswerControllerAnimationBuilder(context, AskQuestionProvider askQuestionProvider, double paddingVertical, int index, Animation<double> animation, TextEditingController controller, GlobalKey<AnimatedListState> listKey) {
-    print(index.toString());
     return Padding(
       padding: EdgeInsets.symmetric(vertical: paddingVertical),
       child: ScaleTransition(
@@ -278,9 +227,7 @@ class _AskQuestionState extends State<AskQuestion> {
                   minLines: 1,
                   maxLines: 100,
                   onChanged: (value) {
-                    if(value.length < 2){
-                      askQuestionProvider.notify();
-                    }
+                    askQuestionProvider.notify();
                   },
                   decoration: InputDecoration(
                     suffixIcon: controller.text != ''

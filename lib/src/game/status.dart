@@ -1,4 +1,0 @@
-enum Status {
-  onSubmit,
-  onLoad
-}
