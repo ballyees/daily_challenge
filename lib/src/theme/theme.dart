@@ -1,4 +1,5 @@
 import 'package:daily_challenge/src/Logger.dart';
+import 'package:daily_challenge/src/global_configure.dart';
 import 'package:daily_challenge/src/preference_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -51,7 +52,6 @@ class AppThemeProvider with ChangeNotifier {
 
   static bool get isDarkThemeStatic => _isDarkTheme;
   bool get isDarkTheme => _isDarkTheme;
-  static final String darkModeKey = 'darkMode';
 
   static final AppThemeProvider _instance = AppThemeProvider._internal();
   factory AppThemeProvider() {
@@ -65,7 +65,7 @@ class AppThemeProvider with ChangeNotifier {
 
   void _sharedPrefs(isDarkMode) async {
     SharedPreferences prefs = await PreferenceUtils.init();
-    prefs.setBool(darkModeKey, isDarkMode);
+    prefs.setBool(GlobalConfigure.darkModeKey, isDarkMode);
   }
 
   ThemeData getTheme({bool isDarkMode}) {
@@ -79,7 +79,7 @@ class AppThemeProvider with ChangeNotifier {
   void toggleTheme() {
     _isDarkTheme = !_isDarkTheme;
     PreferenceUtils.init()
-        .then((prefs) => prefs.setBool(darkModeKey, _isDarkTheme));
+        .then((prefs) => prefs.setBool(GlobalConfigure.darkModeKey, _isDarkTheme));
     notifyListeners();
   }
 }

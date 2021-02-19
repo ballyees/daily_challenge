@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-import 'package:daily_challenge/src/ApiConfigure.dart';
+import 'package:daily_challenge/src/api_provider.dart';
 import 'package:daily_challenge/src/Logger.dart';
 import 'package:daily_challenge/src/appbar/appbar.dart';
 import 'package:daily_challenge/src/game/answer/answer_question_provider.dart';
@@ -35,7 +35,6 @@ class _AnswerQuestionState extends State<AnswerQuestion> {
                 return Consumer<AnswerQuestionProvider>(
                   builder: (context, value, child) {
                     if (answerQuestionProvider.questions.isEmpty) {
-                      reassemble();
                       return Container();
                     }
                     return _mapQuestion(
@@ -44,8 +43,7 @@ class _AnswerQuestionState extends State<AnswerQuestion> {
                         _textHeaderSize,
                         _textBodySize,
                         _paddingHorizontal,
-                        _paddingVertical,
-                        setState);
+                        _paddingVertical);
                   },
                 );
               } else {
@@ -62,10 +60,9 @@ class _AnswerQuestionState extends State<AnswerQuestion> {
       textHeaderSize,
       textBodySize,
       paddingHorizontal,
-      paddingVertical,
-      setState) {
+      paddingVertical) {
     Map question = answerQuestionProvider.getCurrentQuestion();
-    List choice = question[ApiConfigure.choiceKey] as List;
+    List choice = question[ApiProvider.choiceKey] as List;
     if (choice == null) {
       CustomLogger.log('call outline');
       answerQuestionProvider.removeCurrentQuestion();
@@ -97,7 +94,7 @@ class _AnswerQuestionState extends State<AnswerQuestion> {
                       minLines: 1,
                       maxLines: 100,
                       controller: TextEditingController(
-                          text: question[ApiConfigure.questionKey]),
+                          text: question[ApiProvider.questionKey]),
                       decoration: InputDecoration(
                         border: OutlineInputBorder(
                             borderSide: BorderSide(color: Colors.amber),

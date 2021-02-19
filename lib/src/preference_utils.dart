@@ -21,6 +21,7 @@ class PreferenceUtils {
     return prefs?.setBool(key, value) ?? Future.value(false);
   }
 
+
   static String getString(String key, [String defValue]) {
     return _prefsInstance.getString(key) ?? defValue ?? "";
   }

@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:daily_challenge/src/ApiConfigure.dart';
+import 'package:daily_challenge/src/api_provider.dart';
 import 'package:daily_challenge/src/Logger.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
@@ -39,7 +39,7 @@ class AskQuestionProvider with ChangeNotifier {
     _answerControllers.asMap().forEach((index, controller) {
       _answer.add({controller.text: _formAnswerIndex==index});
     });
-    Response response = await post(ApiConfigure.questionApi, body: jsonEncode({'question': _questionController.text, 'choice': _answer}));
+    Response response = await post(ApiProvider.questionApi, body: jsonEncode({'question': _questionController.text, 'choice': _answer}));
     _formAnswerIndex = 0;
     clearController();
     settingField();

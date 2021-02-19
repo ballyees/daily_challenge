@@ -1,7 +1,9 @@
+import 'package:daily_challenge/src/api_provider.dart';
 import 'package:daily_challenge/src/Logger.dart';
 import 'package:daily_challenge/src/custom_icons/counter.dart';
 import 'package:daily_challenge/src/game/answer/answer_question_provider.dart';
 import 'package:daily_challenge/src/game/ask/ask_question_privider.dart';
+import 'package:daily_challenge/src/global_configure.dart';
 import 'package:daily_challenge/src/preference_utils.dart';
 import 'package:daily_challenge/src/theme/theme.dart';
 import 'package:ff_navigation_bar/ff_navigation_bar.dart';
@@ -26,28 +28,39 @@ class MyApp extends StatelessWidget {
           if (snapshot.hasData) {
             print('app created');
             bool isDarkMode =
-                snapshot.data.getBool(AppThemeProvider.darkModeKey) ??
+                snapshot.data.getBool(GlobalConfigure.darkModeKey) ??
                     (SchedulerBinding.instance.window.platformBrightness ==
                         Brightness.dark);
 
-            return MultiProvider(
-                providers: [
-                  ChangeNotifierProvider.value(value: CounterProvider()),
-                  ChangeNotifierProvider.value(value: PageIndexProvider()),
-                  Provider.value(value: AskQuestionProvider()),
-                  // ChangeNotifierProvider(create: (context) => AnswerQuestionProvider(),)
-                  Provider.value(value: AnswerQuestionProvider()),
-                ],
-                child: Consumer<AppThemeProvider>(
-                  builder: (context, data, child) => MaterialApp(
-                    debugShowCheckedModeBanner: false,
-                    title: 'Daily Challenge',
-                    theme: appThemeProvider.getTheme(isDarkMode: isDarkMode),
-                    darkTheme:
-                        appThemeProvider.getTheme(isDarkMode: isDarkMode),
-                    home: HomePage(),
-                  ),
-                ));
+            return FutureBuilder(
+                future: ApiProvider.getUserId(),
+              builder: (context, snapshot2) {
+                print(snapshot2.hasError);
+                  if(snapshot2.hasData){
+                    print(snapshot2.data);
+                return MultiProvider(
+                    providers: [
+                      ChangeNotifierProvider.value(value: CounterProvider()),
+                      ChangeNotifierProvider.value(value: PageIndexProvider()),
+                      Provider.value(value: AskQuestionProvider()),
+                      // ChangeNotifierProvider(create: (context) => AnswerQuestionProvider(),)
+                      Provider.value(value: AnswerQuestionProvider()),
+                    ],
+                    child: Consumer<AppThemeProvider>(
+                      builder: (context, data, child) => MaterialApp(
+                        debugShowCheckedModeBanner: false,
+                        title: 'Daily Challenge',
+                        theme: appThemeProvider.getTheme(isDarkMode: isDarkMode),
+                        darkTheme:
+                            appThemeProvider.getTheme(isDarkMode: isDarkMode),
+                        home: HomePage(),
+                      ),
+                    ));
+              }else{
+                    return Center(child: CircularProgressIndicator());
+                  }
+                }
+            );
           } else {
             return Center(child: CircularProgressIndicator());
           }
