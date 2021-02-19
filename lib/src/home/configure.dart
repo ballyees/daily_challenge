@@ -1,5 +1,6 @@
 import 'package:daily_challenge/src/custom_icons/counter.dart';
 import 'package:daily_challenge/src/game/home/game_home.dart';
+import 'package:daily_challenge/src/history/history_question.dart';
 import 'package:daily_challenge/src/setting/setting.dart';
 import 'package:ff_navigation_bar/ff_navigation_bar_item.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +16,7 @@ class ConfigureHomePage {
     GameHome(),
     ChangeNotifierProvider.value(child: CounterPage(), value: CounterProvider(),),
     Scaffold(backgroundColor: Colors.blue),
-    Scaffold(backgroundColor: Colors.black),
+    HistoryQuestionPage(),
     SettingPage()
   ];
   static final List<FFNavigationBarItem> items = <FFNavigationBarItem>[

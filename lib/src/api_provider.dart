@@ -46,6 +46,13 @@ class ApiProvider {
     });
   }
 
+  static Future<Map> getHistory() async {
+    return await get(historyApi, headers: <String, String>{'userId': PreferenceUtils.getString(GlobalConfigure.userIdPrefKey)}).then((res){
+      // print(jsonDecode(res.body)[responseKey]);
+      return jsonDecode(res.body)[responseKey];
+    });
+  }
+
   static Future<bool> postHistory(String choice, String question) async {
     // final userId = PreferenceUtils.getString(GlobalConfigure.userIdPrefKey);
     return await post(historyApi, body: jsonEncode({'userId': PreferenceUtils.getString(GlobalConfigure.userIdPrefKey), 'choice': choice, 'questionId': question})).then((res){
