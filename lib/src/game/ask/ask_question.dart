@@ -108,6 +108,50 @@ class _AskQuestionState extends State<AskQuestion> {
                         ),
                       ),
                       Text(
+                        'Hint',
+                        textAlign: TextAlign.left,
+                        style: TextStyle(
+                          fontSize: _textSize,
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                            vertical: _paddingVertical,
+                            horizontal: _paddingHorizontal),
+                        child: ChangeNotifierProvider.value(
+                          value: askQuestionProvider,
+                          child: Consumer<AskQuestionProvider>(
+                            builder: (context, value, child) => TextFormField(
+                              minLines: 1,
+                              maxLines: 100,
+                              onChanged: (value) {
+                                if(value.length < 2){
+                                  askQuestionProvider.notify();
+                                }
+                              },
+                              controller:
+                              askQuestionProvider.hintController,
+                              decoration: InputDecoration(
+                                suffixIcon: askQuestionProvider.hintController.text !=
+                                    ''
+                                    ? IconButton(
+                                  onPressed: () {
+                                    askQuestionProvider
+                                        .clearHintController();
+                                  },
+                                  icon: Icon(Icons.clear),
+                                )
+                                    : null,
+                                hintText: "Enter your hint here (optional)",
+                                border: OutlineInputBorder(
+                                    borderSide: BorderSide(color: Colors.amber),
+                                    borderRadius: BorderRadius.circular(5)),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Text(
                         'ANSWER',
                         textAlign: TextAlign.left,
                         style: TextStyle(

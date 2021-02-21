@@ -8,6 +8,7 @@ import 'package:http/http.dart';
 
 class AskQuestionProvider with ChangeNotifier {
   TextEditingController _questionController;
+  TextEditingController _hintController;
   int _formAnswerIndex;
   List<TextEditingController> _answerControllers;
   bool _hasAnswer;
@@ -18,12 +19,16 @@ class AskQuestionProvider with ChangeNotifier {
     notifyListeners();
   }
   bool get hasAnswer => _hasAnswer;
+  TextEditingController get hintController => _hintController;
   TextEditingController get questionController => _questionController;
   List<TextEditingController> get answerControllers => _answerControllers;
+
   void clearController(){
     _answerControllers.clear();
+    _hintController.clear();
     _questionController.clear();
     _answerControllers = null;
+    _hintController = null;
     _questionController = null;
   }
 
@@ -39,7 +44,7 @@ class AskQuestionProvider with ChangeNotifier {
     _answerControllers.asMap().forEach((index, controller) {
       _answer.add({controller.text: _formAnswerIndex==index});
     });
-    Response response = await post(ApiProvider.questionApi, body: jsonEncode({'question': _questionController.text, 'choice': _answer}));
+    Response response = await post(ApiProvider.questionApi, body: jsonEncode({'question': _questionController.text, 'choice': _answer, 'hint': _hintController.text}));
     _formAnswerIndex = 0;
     clearController();
     settingField();
@@ -133,6 +138,11 @@ class AskQuestionProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void clearHintController() {
+    hintController.clear();
+    notifyListeners();
+  }
+
   void clearQuestionController() {
     questionController.clear();
     notifyListeners();
@@ -144,6 +154,7 @@ class AskQuestionProvider with ChangeNotifier {
 
   void settingField() {
     _questionController = TextEditingController();
+    _hintController = TextEditingController();
     _formAnswerIndex = 0;
     _hasAnswer = false;
     _answerControllers = <TextEditingController>[

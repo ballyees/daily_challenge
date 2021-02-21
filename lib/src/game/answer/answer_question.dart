@@ -1,9 +1,11 @@
+import 'dart:math';
 import 'dart:ui';
 
 import 'package:daily_challenge/src/api_provider.dart';
 import 'package:daily_challenge/src/Logger.dart';
 import 'package:daily_challenge/src/appbar/appbar.dart';
 import 'package:daily_challenge/src/game/answer/answer_question_provider.dart';
+import 'package:daily_challenge/src/game/answer/report_question.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -78,12 +80,56 @@ class _AnswerQuestionState extends State<AnswerQuestion> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    'QUESTION',
-                    textAlign: TextAlign.left,
-                    style: TextStyle(
-                      fontSize: textHeaderSize,
-                    ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'QUESTION',
+                        textAlign: TextAlign.left,
+                        style: TextStyle(
+                          fontSize: textHeaderSize,
+                        ),
+                      ),
+                      Tooltip(
+                        message: "SHOW HINT",
+                        waitDuration: Duration(microseconds: 1),
+                        child: RawMaterialButton(
+                          child: Icon(Icons.info_outline),
+                          shape: CircleBorder(),
+                          onPressed: () {
+                            showDialog(context: context, builder: (context) => BackdropFilter(
+                              filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
+                              child: AlertDialog(
+                                title: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Text('HINT'),
+                                    SizedBox(
+                                      width: 10,
+                                    ),
+                                    Transform.rotate(
+                                      angle: pi,
+                                      child: Icon(
+                                          Icons.wb_incandescent
+                                      ),
+                                    )
+                                  ],
+                                ),
+                                content: Text(question["hint"]??"No hint in this question"),
+                                actions: [
+                                  FlatButton(
+                                    child: Text('OK'),
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                  )
+                                ],
+                              ),
+                            ),);
+                          },
+                        ),
+                      ),
+                    ],
                   ),
                   Padding(
                     padding: EdgeInsets.symmetric(
@@ -182,7 +228,15 @@ class _AnswerQuestionState extends State<AnswerQuestion> {
             onPressed: () {
               Navigator.of(context).pop();
             },
-          )
+          ),
+          FlatButton(
+            child: Text('REPORT'),
+            onPressed: () {
+              Navigator.of(context).pop();
+              showDialog(context: context,
+                builder: (context) => ReportQuestion(),);
+            },
+          ),
         ],
       ),
     );
