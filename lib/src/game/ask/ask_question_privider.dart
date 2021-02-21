@@ -44,7 +44,7 @@ class AskQuestionProvider with ChangeNotifier {
     _answerControllers.asMap().forEach((index, controller) {
       _answer.add({controller.text: _formAnswerIndex==index});
     });
-    Response response = await post(ApiProvider.questionApi, body: jsonEncode({'question': _questionController.text, 'choice': _answer, 'hint': _hintController.text}));
+    Response response = await post(ApiProvider.questionApi, body: jsonEncode({'question': _questionController.text, 'choice': _answer, 'hint': (_hintController.text!="")?_hintController.text:null}));
     _formAnswerIndex = 0;
     clearController();
     settingField();

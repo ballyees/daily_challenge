@@ -3,6 +3,8 @@ import 'dart:convert';
 
 import 'package:daily_challenge/src/api_provider.dart';
 import 'package:daily_challenge/src/Logger.dart';
+import 'package:daily_challenge/src/global_configure.dart';
+import 'package:daily_challenge/src/preference_utils.dart';
 import 'package:flutter/material.dart';
 
 class AnswerQuestionProvider with ChangeNotifier {
@@ -21,7 +23,7 @@ class AnswerQuestionProvider with ChangeNotifier {
   AnswerQuestionProvider._internal() {
     _questions = Queue();
     selectChoice = 0;
-    stack = 0;
+    stack = PreferenceUtils.getInt(GlobalConfigure.stackKey, 0);
     CustomLogger.log('AnswerQuestionProvider: singleton created');
   }
 
@@ -55,10 +57,7 @@ class AnswerQuestionProvider with ChangeNotifier {
       CustomLogger.log('empty question');
       request = await requestQuestion().then((value) => value);
     }else{
-      var func = <bool>(dummy) async {
-        return dummy;
-      };
-      request = await func(true).then((value) => value);
+      request = await Future.value(true);
     }
     notifyListeners();
     return request;
@@ -68,6 +67,19 @@ class AnswerQuestionProvider with ChangeNotifier {
     return _questions.first;
   }
 
+  bool correctAnswer(bool isCorrect){
+    print('prev: $stack');
+    if(isCorrect){
+      stack += isCorrect?1:0;
+      PreferenceUtils.setInt(GlobalConfigure.stackKey, stack);
+    }else{
+      stack = 0;
+      PreferenceUtils.setInt(GlobalConfigure.stackKey, stack);
+    }
+    print('current: $stack');
+    return isCorrect;
+  }
+
   Map onSubmit(){
     Map question = getCurrentQuestion();
     Map choice = question['choice'].elementAt(selectChoice);
@@ -75,6 +87,7 @@ class AnswerQuestionProvider with ChangeNotifier {
     Map correctChoice = (question['choice'] as List).where((element) => element[element.keys.first]).toList()[0];
     /// reset select item
     selectChoice = 0;
+    correctAnswer(choice[choice.keys.first]);
     removeCurrentQuestion();
 
     return {'isCorrect': choice[choice.keys.first], 'correctChoice': correctChoice};
