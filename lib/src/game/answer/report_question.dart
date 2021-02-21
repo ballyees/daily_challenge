@@ -4,9 +4,8 @@ import 'package:flutter/material.dart';
 class ReportQuestionProvider {
   static List<String> reportQuestionItem = ["wrong hint", "wrong answer"];
   static String dropdownVal =
-  ReportQuestionProvider.reportQuestionItem.elementAt(0);
+      ReportQuestionProvider.reportQuestionItem.elementAt(0);
   static Map functionMapping = {};
-
 }
 
 enum status { onLoad }
@@ -42,13 +41,13 @@ class _ReportQuestionState extends State<ReportQuestion> {
                           value: ReportQuestionProvider.dropdownVal,
                           items: ReportQuestionProvider.reportQuestionItem
                               .map((e) => DropdownMenuItem(
-                            child: Align(
-                                alignment: Alignment.center,
-                                child: Text(
-                                  e,
-                                )),
-                            value: e,
-                          ))
+                                    child: Align(
+                                        alignment: Alignment.center,
+                                        child: Text(
+                                          e,
+                                        )),
+                                    value: e,
+                                  ))
                               .toList(),
                           onChanged: (value) {
                             setState(() {
@@ -63,9 +62,10 @@ class _ReportQuestionState extends State<ReportQuestion> {
                     padding: EdgeInsets.symmetric(vertical: 10),
                     child: Row(
                       children: [
-                        Text('DETAIL', style: TextStyle(
-                            fontSize: 20
-                        ),),
+                        Text(
+                          'DETAIL',
+                          style: TextStyle(fontSize: 20),
+                        ),
                       ],
                     ),
                   ),
@@ -79,14 +79,13 @@ class _ReportQuestionState extends State<ReportQuestion> {
                             maxLines: 100,
                             controller: _controller,
                             decoration: InputDecoration(
-                              suffixIcon: _controller.text !=
-                                  ''
+                              suffixIcon: _controller.text != ''
                                   ? IconButton(
-                                onPressed: () {
-                                  _controller.clear();
-                                },
-                                icon: Icon(Icons.clear),
-                              )
+                                      onPressed: () {
+                                        _controller.clear();
+                                      },
+                                      icon: Icon(Icons.clear),
+                                    )
                                   : null,
                               hintText: "Enter your detail here",
                               border: OutlineInputBorder(

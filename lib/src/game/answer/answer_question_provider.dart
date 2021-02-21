@@ -27,7 +27,7 @@ class AnswerQuestionProvider with ChangeNotifier {
     CustomLogger.log('AnswerQuestionProvider: singleton created');
   }
 
-  void refreshQuestion(){
+  void refreshQuestion() {
     _questions.clear();
     requestQuestion();
     notifyListeners();
@@ -35,7 +35,7 @@ class AnswerQuestionProvider with ChangeNotifier {
 
   Future<bool> requestQuestion() async {
     // print('is empty q: ${_questions.isEmpty}');
-    if(_questions.isNotEmpty){
+    if (_questions.isNotEmpty) {
       return true;
     }
     // ///offline-test
@@ -44,7 +44,7 @@ class AnswerQuestionProvider with ChangeNotifier {
     //     return true;
     // });
     ///online
-    return await ApiProvider.getQuestion().then((res){
+    return await ApiProvider.getQuestion().then((res) {
       _questions = Queue.from(jsonDecode(res.body)[ApiProvider.responseKey]);
       return res.statusCode < 400;
     });
@@ -53,10 +53,10 @@ class AnswerQuestionProvider with ChangeNotifier {
   Future<bool> removeCurrentQuestion() async {
     var q = _questions.removeFirst();
     bool request;
-    if(_questions.isEmpty){
+    if (_questions.isEmpty) {
       CustomLogger.log('empty question');
       request = await requestQuestion().then((value) => value);
-    }else{
+    } else {
       request = await Future.value(true);
     }
     notifyListeners();
@@ -67,34 +67,38 @@ class AnswerQuestionProvider with ChangeNotifier {
     return _questions.first;
   }
 
-  bool correctAnswer(bool isCorrect){
-    print('prev: $stack');
-    if(isCorrect){
-      stack += isCorrect?1:0;
+  int correctAnswer(bool isCorrect) {
+    if (isCorrect) {
+      stack += isCorrect ? 1 : 0;
       PreferenceUtils.setInt(GlobalConfigure.stackKey, stack);
-    }else{
+    } else {
       stack = 0;
       PreferenceUtils.setInt(GlobalConfigure.stackKey, stack);
     }
-    print('current: $stack');
-    return isCorrect;
+
+    return stack;
   }
 
-  Map onSubmit(){
+  Map onSubmit() {
     Map question = getCurrentQuestion();
     Map choice = question['choice'].elementAt(selectChoice);
     ApiProvider.postHistory(choice.keys.first, question['id']);
-    Map correctChoice = (question['choice'] as List).where((element) => element[element.keys.first]).toList()[0];
+    Map correctChoice = (question['choice'] as List)
+        .where((element) => element[element.keys.first])
+        .toList()[0];
+
     /// reset select item
     selectChoice = 0;
     correctAnswer(choice[choice.keys.first]);
     removeCurrentQuestion();
 
-    return {'isCorrect': choice[choice.keys.first], 'correctChoice': correctChoice};
+    return {
+      'isCorrect': choice[choice.keys.first],
+      'correctChoice': correctChoice
+    };
   }
 
-  void notify(){
+  void notify() {
     notifyListeners();
   }
-
 }

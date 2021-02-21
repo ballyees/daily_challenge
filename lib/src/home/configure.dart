@@ -1,10 +1,10 @@
-import 'package:daily_challenge/src/custom_icons/counter.dart';
 import 'package:daily_challenge/src/game/home/game_home.dart';
 import 'package:daily_challenge/src/history/history_question.dart';
+import 'package:daily_challenge/src/profile/profile.dart';
+import 'package:daily_challenge/src/rank/rank.dart';
 import 'package:daily_challenge/src/setting/setting.dart';
 import 'package:ff_navigation_bar/ff_navigation_bar_item.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 
 class ConfigureHomePage {
@@ -12,10 +12,10 @@ class ConfigureHomePage {
   static int currentPage = 2;
   static const appName = 'Daily Challenge';
   /// App screens
-  static final List<Object> screens  = <Object>[
+  static final List<dynamic> screens  = <dynamic>[
     GameHome(),
-    ChangeNotifierProvider.value(child: CounterPage(), value: CounterProvider(),),
-    Scaffold(backgroundColor: Colors.blue),
+    ProfilePage(),
+    RankPage(),
     HistoryQuestionPage(),
     SettingPage()
   ];

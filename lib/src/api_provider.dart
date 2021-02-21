@@ -9,6 +9,7 @@ class ApiProvider {
   static final ApiProvider _instance = ApiProvider._internal();
   // static final host = 'http://127.0.0.1:8000/';
   static final host = 'http://192.168.1.37:8000/';
+  // static final host = 'http://192.168.43.164:8000/';
   static final questionApi = host + 'v1/api/question/';
   static final usersApi = host + 'v1/api/users/';
   static final historyApi = host + 'v1/api/history/';
@@ -26,6 +27,7 @@ class ApiProvider {
   ApiProvider._internal() {
     print('ApiProvider: singleton created');
   }
+
   ///online
   static Future<Response> getQuestion() async {
     // return await get(questionApi);
@@ -39,7 +41,7 @@ class ApiProvider {
   static Future<String> getUserId() async {
     return await PreferenceUtils.init().then((pref) async {
       String userId = pref.getString(GlobalConfigure.userIdPrefKey);
-      if (userId == null){
+      if (userId == null) {
         // /// offline-test
         // var functionDummy = <String>(dummy) async {
         //   return dummy;
@@ -62,15 +64,21 @@ class ApiProvider {
   }
 
   static Future<Map> getHistory() async {
-    return await get(historyApi, headers: <String, String>{'userId': PreferenceUtils.getString(GlobalConfigure.userIdPrefKey)}).then((res){
+    return await get(historyApi, headers: <String, String>{
+      'userId': PreferenceUtils.getString(GlobalConfigure.userIdPrefKey)
+    }).then((res) {
       // print(jsonDecode(res.body)[responseKey]);
       return jsonDecode(res.body)[responseKey];
     });
   }
 
   static Future<bool> postHistory(String choice, String question) async {
-    // final userId = PreferenceUtils.getString(GlobalConfigure.userIdPrefKey);
-    return await post(historyApi, body: jsonEncode({'userId': PreferenceUtils.getString(GlobalConfigure.userIdPrefKey), 'choice': choice, 'questionId': question})).then((res){
+    return await post(historyApi,
+        body: jsonEncode({
+          'userId': PreferenceUtils.getString(GlobalConfigure.userIdPrefKey),
+          'choice': choice,
+          'questionId': question
+        })).then((res) {
       return res.statusCode < 400;
     });
   }

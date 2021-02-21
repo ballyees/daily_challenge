@@ -34,33 +34,35 @@ class MyApp extends StatelessWidget {
 
             return FutureBuilder(
                 future: ApiProvider.getUserId(),
-              builder: (context, snapshot2) {
-                print(snapshot2.hasError);
-                  if(snapshot2.hasData){
+                builder: (context, snapshot2) {
+                  print(snapshot2.hasError);
+                  if (snapshot2.hasData) {
                     print(snapshot2.data);
-                return MultiProvider(
-                    providers: [
-                      ChangeNotifierProvider.value(value: CounterProvider()),
-                      ChangeNotifierProvider.value(value: PageIndexProvider()),
-                      Provider.value(value: AskQuestionProvider()),
-                      // ChangeNotifierProvider(create: (context) => AnswerQuestionProvider(),)
-                      Provider.value(value: AnswerQuestionProvider()),
-                    ],
-                    child: Consumer<AppThemeProvider>(
-                      builder: (context, data, child) => MaterialApp(
-                        debugShowCheckedModeBanner: false,
-                        title: 'Daily Challenge',
-                        theme: appThemeProvider.getTheme(isDarkMode: isDarkMode),
-                        darkTheme:
-                            appThemeProvider.getTheme(isDarkMode: isDarkMode),
-                        home: HomePage(),
-                      ),
-                    ));
-              }else{
+                    return MultiProvider(
+                        providers: [
+                          ChangeNotifierProvider.value(
+                              value: CounterProvider()),
+                          ChangeNotifierProvider.value(
+                              value: PageIndexProvider()),
+                          Provider.value(value: AskQuestionProvider()),
+                          // ChangeNotifierProvider(create: (context) => AnswerQuestionProvider(),)
+                          Provider.value(value: AnswerQuestionProvider()),
+                        ],
+                        child: Consumer<AppThemeProvider>(
+                          builder: (context, data, child) => MaterialApp(
+                            debugShowCheckedModeBanner: false,
+                            title: 'Daily Challenge',
+                            theme: appThemeProvider.getTheme(
+                                isDarkMode: isDarkMode),
+                            darkTheme: appThemeProvider.getTheme(
+                                isDarkMode: isDarkMode),
+                            home: HomePage(),
+                          ),
+                        ));
+                  } else {
                     return Center(child: CircularProgressIndicator());
                   }
-                }
-            );
+                });
           } else {
             return Center(child: CircularProgressIndicator());
           }
