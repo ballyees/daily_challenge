@@ -177,15 +177,16 @@ class _AskQuestionState extends State<AskQuestion> {
                                     key: _listKey,
                                     initialItemCount:
                                         value.answerControllers.length,
-                                    itemBuilder: (context, index, animation) =>
-                                        _mapAnswerControllerAnimationBuilder(
+                                    itemBuilder: (context, index, animation){
+                                        return (index < value.answerControllers.length)?_mapAnswerControllerAnimationBuilder(
                                                 context,
                                                 askQuestionProvider,
                                                 _paddingVertical,
                                                 index,
                                                 animation,
                                                 value.answerControllers[index],
-                                                _listKey),
+                                                _listKey):Container();
+                                        }
                                   ),
                                 ),
                               ),
