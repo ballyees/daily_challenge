@@ -36,6 +36,12 @@ class AnswerQuestionProvider with ChangeNotifier {
     if(_questions.isNotEmpty){
       return true;
     }
+    // ///offline-test
+    // return await ApiProvider.getQuestion().then((res){
+    //     _questions = Queue.from(jsonDecode(res)[ApiProvider.responseKey]);
+    //     return true;
+    // });
+    ///online
     return await ApiProvider.getQuestion().then((res){
       _questions = Queue.from(jsonDecode(res.body)[ApiProvider.responseKey]);
       return res.statusCode < 400;

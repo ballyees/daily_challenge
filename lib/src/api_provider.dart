@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:daily_challenge/src/global_configure.dart';
 import 'package:daily_challenge/src/preference_utils.dart';
+import 'package:flutter/services.dart';
 import 'package:http/http.dart';
 
 class ApiProvider {
@@ -25,16 +26,30 @@ class ApiProvider {
   ApiProvider._internal() {
     print('ApiProvider: singleton created');
   }
-
+  ///online
   static Future<Response> getQuestion() async {
     // return await get(questionApi);
     return await get(questionApiLimit);
   }
+  // ///offline-test
+  // static Future<String> getQuestion() async {
+  //   return await rootBundle.loadString("assets/question.json");
+  // }
 
   static Future<String> getUserId() async {
     return await PreferenceUtils.init().then((pref) async {
       String userId = pref.getString(GlobalConfigure.userIdPrefKey);
       if (userId == null){
+        // /// offline-test
+        // var functionDummy = <String>(dummy) async {
+        //   return dummy;
+        // };
+        // return await functionDummy('dummy-userID').then((res){
+        //     userId = res;
+        //     pref.setString(GlobalConfigure.userIdPrefKey, userId);
+        //     return userId;
+        // });
+        ///online
         return await post(usersApi, body: jsonEncode({'mode': 0})).then((res) {
           Map dataResponse = jsonDecode(res.body)[responseKey];
           userId = dataResponse[responseGeneratedKeys][0];
