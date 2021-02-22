@@ -164,22 +164,31 @@ class _AnswerQuestionState extends State<AnswerQuestion> {
                         itemCount: choice.length,
                         itemBuilder: (context, index) {
                           Map item = choice.elementAt(index) as Map;
-                          return Row(
-                            children: [
-                              Radio(
-                                value: index,
-                                groupValue: answerQuestionProvider.selectChoice,
-                                onChanged: (value) {
-                                  answerQuestionProvider.selectChoice = value;
-                                  print('changeVal');
-                                  answerQuestionProvider.notify();
-                                },
+                          return GestureDetector(
+                            onTap: (){
+                              answerQuestionProvider.selectChoice = index;
+                              print('changeVal');
+                              answerQuestionProvider.notify();
+                            },
+                            child: Container(
+                              child: Row(
+                                children: [
+                                  Radio(
+                                    value: index,
+                                    groupValue: answerQuestionProvider.selectChoice,
+                                    onChanged: (value) {
+                                      answerQuestionProvider.selectChoice = value;
+                                      print('changeVal');
+                                      answerQuestionProvider.notify();
+                                    },
+                                  ),
+                                  Text(
+                                    item.keys.first,
+                                    style: TextStyle(fontSize: textBodySize),
+                                  )
+                                ],
                               ),
-                              Text(
-                                item.keys.first,
-                                style: TextStyle(fontSize: textBodySize),
-                              )
-                            ],
+                            ),
                           );
                         },
                       )),
