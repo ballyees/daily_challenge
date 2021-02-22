@@ -171,6 +171,7 @@ class _AnswerQuestionState extends State<AnswerQuestion> {
                               answerQuestionProvider.notify();
                             },
                             child: Container(
+                              color: Color.fromRGBO(255, 255, 255, 0),
                               child: Row(
                                 children: [
                                   Radio(

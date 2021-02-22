@@ -301,13 +301,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.2.19-nullsafety.2"
-  timelines:
+  timeline_tile:
     dependency: "direct main"
     description:
-      name: timelines
+      name: timeline_tile
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.0.2+1"
+    version: "1.0.0"
   typed_data:
     dependency: transitive
     description:
@@ -338,4 +338,4 @@ packages:
     version: "0.1.0"
 sdks:
   dart: ">=2.10.0-110 <2.11.0"
-  flutter: ">=1.17.0 <2.0.0"
+  flutter: ">=1.16.0 <2.0.0"

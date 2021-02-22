@@ -5,6 +5,7 @@ import 'package:daily_challenge/src/game/answer/answer_question_provider.dart';
 import 'package:daily_challenge/src/game/ask/ask_question_privider.dart';
 import 'package:daily_challenge/src/global_configure.dart';
 import 'package:daily_challenge/src/preference_utils.dart';
+import 'package:daily_challenge/src/profile/profile_provider.dart';
 import 'package:daily_challenge/src/theme/theme.dart';
 import 'package:ff_navigation_bar/ff_navigation_bar.dart';
 import 'package:flutter/material.dart';
@@ -41,12 +42,12 @@ class MyApp extends StatelessWidget {
                     return MultiProvider(
                         providers: [
                           ChangeNotifierProvider.value(
-                              value: CounterProvider()),
-                          ChangeNotifierProvider.value(
                               value: PageIndexProvider()),
                           Provider.value(value: AskQuestionProvider()),
                           // ChangeNotifierProvider(create: (context) => AnswerQuestionProvider(),)
                           Provider.value(value: AnswerQuestionProvider()),
+                          ChangeNotifierProvider.value(
+                              value: ProfileProvider()),
                         ],
                         child: Consumer<AppThemeProvider>(
                           builder: (context, data, child) => MaterialApp(
