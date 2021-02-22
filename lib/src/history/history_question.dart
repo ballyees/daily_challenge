@@ -1,8 +1,14 @@
 import 'package:daily_challenge/src/api_provider.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:timelines/timelines.dart';
+import 'package:timeline_tile/timeline_tile.dart';
 
-class HistoryQuestionPage extends StatelessWidget {
+class HistoryQuestionPage extends StatefulWidget {
+  @override
+  _HistoryQuestionPageState createState() => _HistoryQuestionPageState();
+}
+
+class _HistoryQuestionPageState extends State<HistoryQuestionPage> {
   @override
   Widget build(BuildContext context) {
     double _appBarHeight = AppBar().preferredSize.height;
@@ -17,10 +23,8 @@ class HistoryQuestionPage extends StatelessWidget {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             Map data = snapshot.data as Map;
-            // print('data: ${snapshot.data}');
-            data.keys.forEach((element) {
-              print(data[element]);
-            });
+            print('data: ${snapshot.data}');
+            List keys = data.keys.toList();
             return Scaffold(
               body: SingleChildScrollView(
                 child: Container(
@@ -37,21 +41,79 @@ class HistoryQuestionPage extends StatelessWidget {
                           )
                         ],
                       ),
-                      Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-                        Expanded(
-                          child: FixedTimeline.tileBuilder(
-                            // mainAxisSize: MainAxisSize.max,
-                            builder: TimelineTileBuilder.fromStyle(
-                              contentsAlign: ContentsAlign.basic,
-                              contentsBuilder: (context, index) => Padding(
-                                padding: const EdgeInsets.all(24.0),
-                                child: Text('Timeline Event $index asdasdqweqwe123'),
+                      Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            // Expanded(
+                            //   child: ExpansionTile(title: new Text("Numbers"),
+                            //     children: <Widget>[
+                            //       new Text("Number: 1"),
+                            //       new Text("Number: 2"),
+                            //       new Text("Number: 3"),
+                            //       new Text("Number: 4"),
+                            //       new Text("Number: 5")
+                            //     ],
+                            //   ),
+                            // ),
+                            Expanded(
+                              child: ListView.builder(
+                                itemCount: keys.length,
+                                shrinkWrap: true,
+                                itemBuilder: (context, index) => TimelineTile(
+                                  alignment: TimelineAlign.start,
+                                  indicatorStyle: IndicatorStyle(
+                                    color: Colors.amber,
+                                  ),
+                                  endChild: GestureDetector(
+                                    onTap: () {
+                                      print('1 Tap');
+                                    },
+                                    child: Container(
+                                      // color: Colors.lightGreenAccent,
+                                      constraints: const BoxConstraints(
+                                        minHeight: 50,
+                                      ),
+                                      child: Align(
+                                          alignment: Alignment.centerLeft,
+                                          child: Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 20),
+                                            child: ExpansionTile(
+                                              title: Text(
+                                                keys
+                                                    .elementAt(index)
+                                                    .toString(),
+                                                style: TextStyle(
+                                                    fontSize: _textBodySize),
+                                              ),
+                                              expandedAlignment:
+                                                  Alignment.centerLeft,
+                                              children: <Widget>[
+                                                ListView.builder(
+                                                  itemCount: data[
+                                                          keys.elementAt(index)]
+                                                      .length,
+                                                  itemBuilder:
+                                                      (context, innerIndex) =>
+                                                          Row(
+                                                    children: [
+                                                      Column(
+                                                        children: [
+                                                          Text(data[keys.elementAt(index)][innerIndex]['create_date'].toString())
+                                                        ],
+                                                      )
+                                                    ],
+                                                  ),
+                                                )
+                                              ],
+                                            ),
+                                          )),
+                                    ),
+                                  ),
+                                ),
                               ),
-                              itemCount: 10,
-                            ),
-                          ),
-                        )
-                      ]),
+                            )
+                          ]),
                     ],
                   ),
                 ),
@@ -60,19 +122,6 @@ class HistoryQuestionPage extends StatelessWidget {
           }
           return Center(child: CircularProgressIndicator());
         },
-      ),
-    );
-  }
-
-  Widget timeline(){
-    return Timeline.tileBuilder(
-      builder: TimelineTileBuilder.fromStyle(
-        contentsAlign: ContentsAlign.basic,
-        contentsBuilder: (context, index) => Padding(
-          padding: const EdgeInsets.all(24.0),
-          child: Text('Timeline Event $index'),
-        ),
-        itemCount: 10,
       ),
     );
   }
