@@ -25,8 +25,8 @@ class _HistoryQuestionPageState extends State<HistoryQuestionPage> {
             Map data = snapshot.data as Map;
             print('data: ${snapshot.data}');
             List keys = data.keys.toList();
-            return Scaffold(
-              body: SingleChildScrollView(
+            return
+              SingleChildScrollView(
                 child: Container(
                   padding: EdgeInsets.all(8),
                   child: Column(
@@ -117,8 +117,7 @@ class _HistoryQuestionPageState extends State<HistoryQuestionPage> {
                     ],
                   ),
                 ),
-              ),
-            );
+              );
           }
           return Center(child: CircularProgressIndicator());
         },
