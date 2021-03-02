@@ -13,17 +13,13 @@ class ConfigureHomePage {
   static const appName = 'Daily Challenge';
   /// App screens
   static final List<dynamic> screens  = <dynamic>[
-    GameHome(),
     ProfilePage(),
     RankPage(),
+    GameHome(),
     HistoryQuestionPage(),
     SettingPage()
   ];
   static final List<FFNavigationBarItem> items = <FFNavigationBarItem>[
-    FFNavigationBarItem(
-      iconData: Icons.home,
-      label: 'Home',
-    ),
     FFNavigationBarItem(
       iconData: Icons.account_circle,
       label: 'Profile',
@@ -31,6 +27,10 @@ class ConfigureHomePage {
     FFNavigationBarItem(
       iconData: Icons.star,
       label: 'Ranking',
+    ),
+    FFNavigationBarItem(
+      iconData: Icons.home,
+      label: 'Home',
     ),
     FFNavigationBarItem(
       iconData: Icons.history,
