@@ -7,15 +7,15 @@ import 'package:http/http.dart';
 
 class ApiProvider {
   static final ApiProvider _instance = ApiProvider._internal();
-  // static final host = 'http://127.0.0.1:8000/';
   // static final host = 'http://192.168.1.37:8000/';
   static final host = 'http://192.168.43.164:8000/';
   static final questionApi = host + 'v1/api/question/';
   static final usersApi = host + 'v1/api/users/';
   static final historyApi = host + 'v1/api/history/';
+  static final rankApi = usersApi + 'rank/?k=10';
   static final responseKey = 'response';
   static final responseGeneratedKeys = 'generated_keys';
-  static final questionApiLimit = questionApi + '?limit=2';
+  static final questionApiLimit = questionApi + '?limit=5';
   static final questionKey = 'question';
   static final choiceKey = 'choice';
 
@@ -65,9 +65,23 @@ class ApiProvider {
 
   static Future<Map> getHistory() async {
     return await get(historyApi, headers: <String, String>{
-      'userId': PreferenceUtils.getString(GlobalConfigure.userIdPrefKey)
+      GlobalConfigure.userIdPrefKey: PreferenceUtils.getString(GlobalConfigure.userIdPrefKey)
     }).then((res) {
       // print(jsonDecode(res.body)[responseKey]);
+      return jsonDecode(res.body)[responseKey];
+    });
+  }
+
+  static Future<List> getRank() async {
+    String username = PreferenceUtils.getString(GlobalConfigure.usernamePrefKey);
+    Map headers = <String, String>{
+      GlobalConfigure.userIdPrefKey: PreferenceUtils.getString(GlobalConfigure.userIdPrefKey)
+    };
+    if(username != ''){
+      headers[GlobalConfigure.usernamePrefKey] = username;
+    }
+    return await get(rankApi, headers: headers).then((res) {
+      print(jsonDecode(res.body)[responseKey]);
       return jsonDecode(res.body)[responseKey];
     });
   }
@@ -75,7 +89,7 @@ class ApiProvider {
   static Future<bool> postHistory(String choice, String question) async {
     return await post(historyApi,
         body: jsonEncode({
-          'userId': PreferenceUtils.getString(GlobalConfigure.userIdPrefKey),
+          GlobalConfigure.userIdPrefKey: PreferenceUtils.getString(GlobalConfigure.userIdPrefKey),
           'choice': choice,
           'questionId': question
         })).then((res) {
