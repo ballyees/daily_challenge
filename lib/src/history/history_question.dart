@@ -10,6 +10,10 @@ class HistoryQuestionPage extends StatefulWidget {
 }
 
 class _HistoryQuestionPageState extends State<HistoryQuestionPage> {
+
+  int maxDay = 2;
+  int incrementMaxDay = 5;
+
   @override
   Widget build(BuildContext context) {
     double _appBarHeight = AppBar().preferredSize.height;
@@ -17,6 +21,7 @@ class _HistoryQuestionPageState extends State<HistoryQuestionPage> {
     double _textBodySize = _textHeaderSize * 0.6;
     double _paddingHorizontal = 20;
     double _paddingVertical = 10;
+
     return Scaffold(
       appBar: AppBar(),
       body: FutureBuilder(
@@ -25,6 +30,7 @@ class _HistoryQuestionPageState extends State<HistoryQuestionPage> {
           if (snapshot.hasData) {
             Map data = snapshot.data as Map;
             List keys = data.keys.toList();
+            int itemCount = (maxDay <= keys.length)?maxDay:keys.length;
             return SingleChildScrollView(
               physics: ScrollPhysics(),
               child: Container(
@@ -41,15 +47,16 @@ class _HistoryQuestionPageState extends State<HistoryQuestionPage> {
                         )
                       ],
                     ),
-                    Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+                    Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                       Expanded(
                         child: ListView.builder(
                           physics: NeverScrollableScrollPhysics(),
-                          itemCount: keys.length,
+                          itemCount: itemCount,
                           shrinkWrap: true,
+                          padding: EdgeInsets.symmetric(horizontal: 10),
                           itemBuilder: (context, index) => TimelineTile(
                             isFirst: index == 0,
-                            isLast: index+1 == keys.length,
+                            isLast: index+1 == itemCount,
                             alignment: TimelineAlign.start,
                             indicatorStyle: IndicatorStyle(
                               color: Colors.amber,
@@ -74,7 +81,7 @@ class _HistoryQuestionPageState extends State<HistoryQuestionPage> {
                                           style: TextStyle(
                                               fontSize: _textBodySize),
                                         ),
-                                        expandedAlignment: Alignment.centerLeft,
+                                        expandedAlignment: Alignment.center,
                                         children: [
                                           ...List.generate(
                                             data[keys.elementAt(index)].length,
@@ -111,6 +118,19 @@ class _HistoryQuestionPageState extends State<HistoryQuestionPage> {
                         ),
                       )
                     ]),
+                    (maxDay < keys.length)?Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        OutlineButton(
+                          child: Text('Load more'),
+                          onPressed: () {
+                            print('increment');
+                          setState(() {
+                            maxDay += incrementMaxDay;
+                          });
+                        },)
+                      ],
+                    ):Row()
                   ],
                 ),
               ),
