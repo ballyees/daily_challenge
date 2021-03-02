@@ -12,7 +12,7 @@ class ApiProvider {
   static final questionApi = host + 'v1/api/question/';
   static final usersApi = host + 'v1/api/users/';
   static final historyApi = host + 'v1/api/history/';
-  static final rankApi = usersApi + 'rank/?k=10';
+  static final rankApi = usersApi + 'rank/?k=${GlobalConfigure.maxRankingShow}';
   static final responseKey = 'response';
   static final responseGeneratedKeys = 'generated_keys';
   static final questionApiLimit = questionApi + '?limit=5';
@@ -81,7 +81,6 @@ class ApiProvider {
       headers[GlobalConfigure.usernamePrefKey] = username;
     }
     return await get(rankApi, headers: headers).then((res) {
-      print(jsonDecode(res.body)[responseKey]);
       return jsonDecode(res.body)[responseKey];
     });
   }
