@@ -25,6 +25,7 @@ class _AskQuestionState extends State<AskQuestion> {
     return Scaffold(
       appBar: AppBarPages.appBarAskQuestion(context, _formKey),
       body: SingleChildScrollView(
+        physics: ScrollPhysics(),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [

@@ -71,6 +71,7 @@ class _AnswerQuestionState extends State<AnswerQuestion> {
       return Container();
     }
     return SingleChildScrollView(
+      physics: ScrollPhysics(),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -160,6 +161,7 @@ class _AnswerQuestionState extends State<AnswerQuestion> {
                           vertical: paddingVertical,
                           horizontal: paddingHorizontal),
                       child: ListView.builder(
+                        physics: NeverScrollableScrollPhysics(),
                         shrinkWrap: true,
                         itemCount: choice.length,
                         itemBuilder: (context, index) {
