@@ -1,5 +1,6 @@
 import 'package:daily_challenge/src/Logger.dart';
 import 'package:daily_challenge/src/appbar/appbar.dart';
+import 'package:daily_challenge/src/preference_utils.dart';
 import 'package:daily_challenge/src/setting/bug_report.dart';
 import 'package:daily_challenge/src/theme/theme.dart';
 import 'package:flutter/material.dart';
@@ -61,6 +62,23 @@ class SettingPage extends StatelessWidget {
                         child: Text('SWITCH USER'),
                         onPressed: () {
                           CustomLogger.log('press switch user');
+                        },
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(25.0),
+                          side: BorderSide(color: Colors.black38),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: RaisedButton(
+                        child: Text('REFRESH PREF'),
+                        onPressed: () {
+                          CustomLogger.log('press pref');
+                          PreferenceUtils.clear();
                         },
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(25.0),
