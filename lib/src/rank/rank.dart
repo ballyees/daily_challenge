@@ -29,10 +29,10 @@ class RankPage extends StatelessWidget {
               print('key: ${element.keys.first}');
               if(key == userId || key == username){
                 rank = element[key][1];
-                print(rank);
               }
             });
             // data = [...data, ...List.generate(5, (index) => {(index+2).toString(): [10-index, 10-index]})];
+            String rank_str = (rank != -1?rank.toString():"undefined");
             return SingleChildScrollView(
               physics: ScrollPhysics(),
               padding: EdgeInsets.all(_paddingHorizontal),
@@ -51,7 +51,7 @@ class RankPage extends StatelessWidget {
                       children: [
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 8),
-                          child: Text('RANK : $rank'),
+                          child: Text('RANK : $rank_str'),
                         ),
                       ],
                     )

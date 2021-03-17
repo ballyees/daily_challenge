@@ -142,7 +142,6 @@ class ProfilePage extends StatelessWidget {
                               'LOG IN',
                             ),
                             onPressed: () {
-                              PreferenceUtils.init().then((pref) => pref.setBool(GlobalConfigure.isLoginPrefKey, true));
                             },
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(25.0),
