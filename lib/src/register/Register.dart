@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-// import 'package:provider/provider.dart';
-// import 'package:daily_challenge/src/Logger.dart';
 import 'constants.dart';
 
 // class RegisterProvider with ChangeNotifier {
@@ -226,6 +224,15 @@ class _RegisterscreenState extends State<RegisterScreen> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: IconButton(
+                          icon: Icon(Icons.close),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                        ),
+                      ),
                       Text(
                         'Register',
                         style: TextStyle(

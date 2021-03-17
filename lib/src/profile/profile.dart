@@ -1,5 +1,6 @@
 import 'package:daily_challenge/src/appbar/appbar.dart';
 import 'package:daily_challenge/src/profile/profile_provider.dart';
+import 'package:daily_challenge/src/register/Register.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -29,7 +30,7 @@ class ProfilePage extends StatelessWidget {
                     width: _width,
                     child: RawMaterialButton(
                       onPressed: () {
-                        // Navigator.of(context).push(MaterialPageRoute(builder: (context) => RegisterScreen(),));
+                        Navigator.of(context).push(MaterialPageRoute(builder: (context) => RegisterScreen(),));
                       },
                       elevation: 2.0,
                       child: Icon(
@@ -95,6 +96,7 @@ class ProfilePage extends StatelessWidget {
                       'REGISTER',
                     ),
                     onPressed: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => RegisterScreen(),));
                     },
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(25.0),
