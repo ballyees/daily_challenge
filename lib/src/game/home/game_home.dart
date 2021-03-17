@@ -25,17 +25,13 @@ class GameHome extends StatelessWidget {
                     child: RawMaterialButton(
                       onPressed: () {},
                       elevation: 2.0,
-                      child: Icon(
-                        Icons.pause,
-                        size: 35.0,
-                      ),
-                      shape: CircleBorder(
-                        side: BorderSide(color: Colors.black38)
-                      ),
-                    )),
-                SizedBox(
-                  height: _height / 10,
+                      child: Image(image: AssetImage('assets/icon_2.png'), colorBlendMode: BlendMode.clear,),
+                      shape: CircleBorder(),
+                    )
                 ),
+                // SizedBox(
+                //   height: _height / 10,
+                // ),
                 SizedBox(
                   width: _width,
                   child: OutlineButton(

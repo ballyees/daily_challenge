@@ -16,6 +16,13 @@ class PrimaryTheme {
   PrimaryTheme._internal() {
     _data = ThemeData(
       brightness: Brightness.light,
+      appBarTheme: AppBarTheme(
+        color: Color.fromRGBO(255, 51, 0, 1)
+      ),
+      bottomNavigationBarTheme: BottomNavigationBarThemeData(
+        backgroundColor: Color.fromRGBO(255, 51, 0, 0.9),
+        selectedItemColor: Color.fromRGBO(255, 51, 50, 0.7),
+      ),
       bannerTheme: MaterialBannerThemeData(backgroundColor: Colors.black38),
     );
     CustomLogger.log('PrimaryTheme: singleton created');

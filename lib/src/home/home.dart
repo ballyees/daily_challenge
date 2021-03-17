@@ -108,11 +108,16 @@ class HomePage extends StatelessWidget {
                 .elementAt(pageIndexProvider.currentIndex)),
         bottomNavigationBar: FFNavigationBar(
           theme: FFNavigationBarTheme(
-              barBackgroundColor: Colors.black12,
+              barBackgroundColor: AppThemeProvider()
+                  .getTheme()
+                  .bottomNavigationBarTheme
+                  .backgroundColor,
+              unselectedItemLabelColor: Colors.white,
+              unselectedItemIconColor: Colors.white,
               selectedItemBackgroundColor: AppThemeProvider()
                   .getTheme()
                   .bottomNavigationBarTheme
-                  .backgroundColor),
+                  .selectedItemColor),
           selectedIndex: pageIndexProvider.currentIndex, // center
           onSelectTab: pageIndexProvider.setCurrentIndex,
           items: ConfigureHomePage.items,

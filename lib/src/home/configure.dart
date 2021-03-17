@@ -23,22 +23,32 @@ class ConfigureHomePage {
     FFNavigationBarItem(
       iconData: Icons.account_circle,
       label: 'Profile',
+      selectedLabelColor: Colors.white,
+      selectedForegroundColor: Colors.white,
     ),
     FFNavigationBarItem(
       iconData: Icons.star,
       label: 'Ranking',
+      selectedLabelColor: Colors.white,
+      selectedForegroundColor: Colors.white,
     ),
     FFNavigationBarItem(
       iconData: Icons.home,
       label: 'Home',
+      selectedLabelColor: Colors.white,
+      selectedForegroundColor: Colors.white,
     ),
     FFNavigationBarItem(
       iconData: Icons.history,
       label: 'History',
+      selectedLabelColor: Colors.white,
+      selectedForegroundColor: Colors.white,
     ),
     FFNavigationBarItem(
       iconData: Icons.settings,
       label: 'Setting',
+      selectedLabelColor: Colors.white,
+      selectedForegroundColor: Colors.white,
     ),
   ];
 }

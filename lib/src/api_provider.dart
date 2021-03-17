@@ -7,8 +7,8 @@ import 'package:http/http.dart';
 
 class ApiProvider {
   static final ApiProvider _instance = ApiProvider._internal();
-  // static final host = 'http://192.168.1.37:8000/';
-  static final host = 'http://192.168.43.164:8000/';
+  static final host = 'http://192.168.1.37:8000/';
+  // static final host = 'http://192.168.43.164:8000/';
   static final questionApi = host + 'v1/api/question/';
   static final usersApi = host + 'v1/api/users/';
   static final historyApi = host + 'v1/api/history/';
@@ -61,6 +61,13 @@ class ApiProvider {
       }
       return userId;
     });
+  }
+
+  static Future<bool> registerUser(Map data) async {
+      return await post(usersApi, body: jsonEncode({...data, 'mode': 1})).then((res) {
+        Map dataResponse = jsonDecode(res.body)[responseKey];
+        return Future.value(true);
+      });
   }
 
   static Future<Map> getHistory() async {

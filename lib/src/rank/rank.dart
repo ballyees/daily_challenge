@@ -39,12 +39,7 @@ class RankPage extends StatelessWidget {
               child: Container(
                 child: Column(
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text('Ranking', style: TextStyle(fontSize: _textHeaderSize),)
-                      ],
-                    ),
+                    Image(image: AssetImage('assets/Icon/Crown.png'), width: _textHeaderSize * 2, height: _textHeaderSize * 2,),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -71,6 +66,8 @@ class RankPage extends StatelessWidget {
     );
   }
   Widget _ListViewBuilder(context, data, rank, paddingVertical){
+    Color bgColor = Color.fromRGBO(255, 0, 0, 0.2);
+    TextStyle textStyle = TextStyle(color: Colors.black);
     return Expanded(
       child: ListView.builder(
         physics: NeverScrollableScrollPhysics(),
@@ -94,6 +91,8 @@ class RankPage extends StatelessWidget {
                     children: [
                       Expanded(
                         child: Chip(
+                          backgroundColor: bgColor,
+                          labelStyle: textStyle,
                           label: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -112,6 +111,8 @@ class RankPage extends StatelessWidget {
           return Padding(
             padding: EdgeInsets.symmetric(horizontal: 15.0*((index < 2)?index:2)),
             child: Chip(
+              backgroundColor: bgColor,
+              labelStyle: textStyle,
               label: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
