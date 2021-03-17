@@ -26,6 +26,7 @@ class RankPage extends StatelessWidget {
             int rank = -1;
             data.forEach((element) {
               String key = element.keys.first;
+              print('key: ${element.keys.first}');
               if(key == userId || key == username){
                 rank = element[key][1];
                 print(rank);
