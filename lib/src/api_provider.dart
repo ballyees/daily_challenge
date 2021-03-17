@@ -66,6 +66,13 @@ class ApiProvider {
   static Future<bool> registerUser(Map data) async {
       return await post(usersApi, body: jsonEncode({...data, 'mode': 1})).then((res) {
         Map dataResponse = jsonDecode(res.body)[responseKey];
+        if(res.statusCode < 400) {
+          PreferenceUtils.init().then((pref) => pref.setBool(GlobalConfigure.isLoginPrefKey, true));
+          PreferenceUtils.setString(GlobalConfigure.usernamePrefKey, data[GlobalConfigure.usernamePrefKey]);
+          PreferenceUtils.setString(GlobalConfigure.passwordPrefKey, data[GlobalConfigure.passwordPrefKey]);
+          PreferenceUtils.setString(GlobalConfigure.emailPrefKey, data[GlobalConfigure.emailPrefKey]);
+          return Future.value(true);
+        }
         return Future.value(true);
       });
   }

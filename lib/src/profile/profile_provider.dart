@@ -5,8 +5,9 @@ import 'package:flutter/material.dart';
 class ProfileProvider with ChangeNotifier {
 
   String _userId;
-
+  String _username;
   String get userId => _userId;
+  String get username => _username;
   static final ProfileProvider _instance = ProfileProvider._internal();
 
   factory ProfileProvider() {
@@ -23,6 +24,7 @@ class ProfileProvider with ChangeNotifier {
   void setFields() {
     PreferenceUtils.init().then((pref){
       _userId = pref.getString(GlobalConfigure.userIdPrefKey);
+      _username = pref.getString(GlobalConfigure.usernamePrefKey);
       print('call set fields');
     });
 
