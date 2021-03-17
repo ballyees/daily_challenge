@@ -1,17 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+// import 'package:provider/provider.dart';
+// import 'package:daily_challenge/src/Logger.dart';
 import 'constants.dart';
 
 // class RegisterProvider with ChangeNotifier {
 //   static final RegisterProvider _instance = RegisterProvider._internal();
-//
 //   factory RegisterProvider() {
 //     CustomLogger.log('counter provider: singleton factory');
 //     return _instance;
-//   }
-//
-//   RegisterProvider._internal() {
-//     CustomLogger.log('counter provider: singleton created');
 //   }
 // }
 
@@ -176,7 +173,7 @@ class _RegisterscreenState extends State<RegisterScreen> {
         child: Text(
           'Register',
           style: TextStyle(
-            color: Color(0xFF527DAA),
+            color: Color.fromRGBO(255, 51, 0, 1)
             letterSpacing: 1.5,
             fontSize: 18.0,
             fontWeight: FontWeight.bold,
@@ -204,7 +201,7 @@ class _RegisterscreenState extends State<RegisterScreen> {
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
                     colors: [
-                      Color.fromRGBO(255, 51, 0, 1),
+                      Color.fromRGBO(255, 51, 0, 1)
                     ],
                     stops: [0.1, 0.4, 0.7, 0.9],
                   ),
@@ -221,15 +218,6 @@ class _RegisterscreenState extends State<RegisterScreen> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: IconButton(
-                          icon: Icon(Icons.close),
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                        ),
-                      ),
                       Text(
                         'Register',
                         style: TextStyle(
