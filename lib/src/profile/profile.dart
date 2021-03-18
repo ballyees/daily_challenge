@@ -2,6 +2,7 @@ import 'package:daily_challenge/src/appbar/appbar.dart';
 import 'package:daily_challenge/src/global_configure.dart';
 import 'package:daily_challenge/src/preference_utils.dart';
 import 'package:daily_challenge/src/profile/profile_provider.dart';
+import 'package:daily_challenge/src/register/Login.dart';
 import 'package:daily_challenge/src/register/Register.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -142,6 +143,7 @@ class ProfilePage extends StatelessWidget {
                               'LOG IN',
                             ),
                             onPressed: () {
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => LoginScreen(),));
                             },
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(25.0),

@@ -200,7 +200,12 @@ class _RegisterscreenState extends State<RegisterScreen> {
               GlobalConfigure.passwordPrefKey: _passwordController.text,
               GlobalConfigure.emailPrefKey: _emailController.text
             };
-            ApiProvider.registerUser(data);
+            ApiProvider.registerUser(data).then((value){
+              if(value){
+                Navigator.of(context).pop();
+              }
+            });
+
           }
         },
         padding: EdgeInsets.all(15.0),
@@ -267,6 +272,7 @@ class _RegisterscreenState extends State<RegisterScreen> {
                             icon: Icon(Icons.close),
                             onPressed: () {
                               Navigator.pop(context);
+                              _formKey.currentState.save();
                             },
                           ),
                         ),

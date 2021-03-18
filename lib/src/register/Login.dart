@@ -100,8 +100,6 @@ class _LoginscreenState extends State<LoginScreen> {
     );
   }
 
-
-
   Widget _buildLoginBtn() {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 25.0),
@@ -111,11 +109,14 @@ class _LoginscreenState extends State<LoginScreen> {
         onPressed: (){
           if (_formKey.currentState.validate()) {
             Map data = {
-              GlobalConfigure.userIdPrefKey: PreferenceUtils.getString(GlobalConfigure.userIdPrefKey,),
               GlobalConfigure.usernamePrefKey: _usernameController.text,
               GlobalConfigure.passwordPrefKey: _passwordController.text,
             };
-            ApiProvider.registerUser(data);
+            ApiProvider.loginUsers(data).then((value){
+              if(value){
+                Navigator.of(context).pop();
+              }
+            });
           }
         },
         padding: EdgeInsets.all(15.0),
