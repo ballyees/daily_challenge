@@ -51,7 +51,7 @@ class RankPage extends StatelessWidget {
                       children: [
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 8),
-                          child: Text('RANK : $rank_str'),
+                          child: Text('RANK : $rank_str',),
                         ),
                       ],
                     )
@@ -65,6 +65,7 @@ class RankPage extends StatelessWidget {
       ),
     );
   }
+
   Widget _ListViewBuilder(context, data, rank, paddingVertical){
     Color bgColor = Color.fromRGBO(255, 0, 0, 0.2);
     TextStyle textStyle = TextStyle(color: Colors.black);
